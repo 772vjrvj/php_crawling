@@ -7,8 +7,8 @@
           "request": "launch",
           "port": 9003,
           "pathMappings": {
-            "D:/GitHub/php_crawling/product_designer": "D:/GitHub/php_crawling/product_designer"
-            // "/php_crawling/product_designer": "D:/GitHub/php_crawling/product_designer"
+            "D:/GitHub/php_crawling/product_designer_kmong": "D:/GitHub/php_crawling/product_designer_kmong"
+            // "/php_crawling/product_designer_kmong": "D:/GitHub/php_crawling/product_designer_kmong"
           },
           "log": true
       }

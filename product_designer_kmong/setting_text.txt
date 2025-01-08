@@ -45,7 +45,7 @@ Hello World
 
 
 
-■ composer 설치 
+■ composer 설치
 
 https://getcomposer.org/download/
 
@@ -190,7 +190,7 @@ composer install 로 재설치
 
 
 
-■ 서버 실행 
+■ 서버 실행
 php artisan serve
 
 http://127.0.0.1:8000/
@@ -219,7 +219,7 @@ APP_KEY=base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
 
 ■ DB 설정
 .env 아래로 수정
-DB_DATABASE=D:/GitHub/php_crawling/product_designer/database/database.sqlite
+DB_DATABASE=D:/GitHub/php_crawling/product_designer_kmong/database/database.sqlite
 
 설정 반영
 .env 파일을 수정한 후 Laravel 설정 캐시를 초기화해야 변경 내용이 반영됩니다:
