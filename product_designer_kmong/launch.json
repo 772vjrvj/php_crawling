@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Listen for Xdebug",
+          "type": "php",
+          "request": "launch",
+          "port": 9003,
+          "pathMappings": {
+            "D:/GitHub/php_crawling/product_designer": "D:/GitHub/php_crawling/product_designer"
+            // "/php_crawling/product_designer": "D:/GitHub/php_crawling/product_designer"
+          },
+          "log": true
+      }
+  ]
+}
