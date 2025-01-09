@@ -147,10 +147,60 @@ function miningReward() {
     $url = "https://tyc.best/dashboard/depth/bonus/bonus_daylist.asp";
     $html = getRequest($url);
 
-    //로컬 테스트 용
-//    $filePath = __DIR__ . "/TYC.html"; // 현재 실행 경로에서 TYC.html 파일을 읽음
-//    $html = file_get_contents($filePath);
+    if (!$html) {
+        echo "HTML 가져오기 실패" . PHP_EOL;
+        return [];
+    }
 
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($html);
+    libxml_clear_errors();
+
+    $xpath = new DOMXPath($dom);
+    $dataList = [];
+
+    // 테이블 찾기
+    $table = $xpath->query("//table[contains(@class, 'basic_table')]")->item(0);
+
+    if ($table) {
+        // 테이블 헤더 가져오기
+        $headers = [];
+        $headerElements = $xpath->query(".//thead/tr/th", $table);
+
+        foreach ($headerElements as $header) {
+            $headers[] = trim($header->textContent);
+        }
+
+        // 테이블 바디 가져오기
+        $tbody = $xpath->query(".//tbody", $table)->item(0);
+        if ($tbody && !empty($headers)) {
+            $rows = $xpath->query(".//tr", $tbody);
+
+            foreach ($rows as $row) {
+                // 해당 row에서 th나 td를 가져옴
+                $cells = $xpath->query(".//th | .//td", $row);
+                $rowData = [];
+
+                // 데이터 매핑
+                foreach ($cells as $index => $cell) {
+                    $headerKey = $headers[$index] ?? "Column_$index";
+                    $rowData[$headerKey] = trim($cell->textContent);
+                }
+
+                // 데이터를 배열에 추가
+                $dataList[] = (object) $rowData; // 객체로 추가 (필요에 따라 배열 형태로도 가능)
+            }
+        }
+    }
+
+    return $dataList;
+}
+
+
+function miningRewardTest() {
+    $filePath = __DIR__ . "/TYC.html"; // 현재 실행 경로에서 TYC.html 파일을 읽음
+    $html = file_get_contents($filePath);
 
     if (!$html) {
         echo "HTML 가져오기 실패" . PHP_EOL;
@@ -239,16 +289,14 @@ function main($username, $password) {
 
 
 
+
 // 실행
 $username = "kkckkc";
 $password = "k@4358220";
 
-main($username, $password);
-
-//테스트
-//$miningRewardList = miningReward();
-//print_r($miningRewardList);
-
+//main($username, $password);
+$miningRewardList = miningRewardTest();
+print_r($miningRewardList);
 
 // 필요 composer 목록
 // composer require guzzlehttp/guzzle symfony/dom-crawler symfony/css-selector monolog/monolog
