@@ -232,32 +232,39 @@ function miningRewardTest() {
         if ($tbody && !empty($headers)) {
             $rows = $xpath->query(".//tr", $tbody);
 
-            foreach ($rows as $rowIndex => $row) {
-                $cells = $xpath->query(".//th | .//td", $row);
-                $rowData = [];
+            if ($rows->length === 1) {
+                foreach ($headers as $header) {
+                    $rowData[$header] = "";
+                }
+                $dataList[] = (object) $rowData;
+            }else{
+                foreach ($rows as $rowIndex => $row) {
+                    $cells = $xpath->query(".//th | .//td", $row);
+                    $rowData = [];
 
-                // 마지막 행인지 확인
-                if ($rowIndex === $rows->length - 1) {
-                    foreach ($headers as $index => $header) {
-                        if ($index === 1) {
-                            // "매출일자"는 공백 처리
-                            $rowData[$header] = "";
-                        } else {
-                            // index가 0이면 cells[0], 그 외는 index - 1
-                            $cellIndex = $index === 0 ? 0 : $index - 1;
-                            $rowData[$header] = trim($cells->item($cellIndex)->textContent ?? "");
+                    // 마지막 행인지 확인
+                    if ($rowIndex === $rows->length - 1) {
+                        foreach ($headers as $index => $header) {
+                            if ($index === 1) {
+                                // "매출일자"는 공백 처리
+                                $rowData[$header] = "";
+                            } else {
+                                // index가 0이면 cells[0], 그 외는 index - 1
+                                $cellIndex = $index === 0 ? 0 : $index - 1;
+                                $rowData[$header] = trim($cells->item($cellIndex)->textContent ?? "");
+                            }
+                        }
+                    } else {
+                        // 일반 데이터 행 처리
+                        foreach ($cells as $index => $cell) {
+                            $headerKey = $headers[$index] ?? "Column_$index";
+                            $rowData[$headerKey] = trim($cell->textContent);
                         }
                     }
-                } else {
-                    // 일반 데이터 행 처리
-                    foreach ($cells as $index => $cell) {
-                        $headerKey = $headers[$index] ?? "Column_$index";
-                        $rowData[$headerKey] = trim($cell->textContent);
-                    }
-                }
 
-                if (!empty($rowData)) {
-                    $dataList[] = (object) $rowData; // 객체로 추가 (필요에 따라 배열 형태로도 가능)
+                    if (!empty($rowData)) {
+                        $dataList[] = (object) $rowData; // 객체로 추가 (필요에 따라 배열 형태로도 가능)
+                    }
                 }
             }
         }

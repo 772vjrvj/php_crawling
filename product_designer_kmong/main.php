@@ -138,6 +138,83 @@ function mainReward() {
     return $dataList;
 }
 
+
+function miningRewardTest() {
+    $filePath = __DIR__ . "/TYC.html"; // 현재 실행 경로에서 TYC.html 파일을 읽음
+//    $filePath = __DIR__ . "/test.html"; // 현재 실행 경로에서 TYC.html 파일을 읽음
+    $html = file_get_contents($filePath);
+
+    if (!$html) {
+        echo "HTML 가져오기 실패" . PHP_EOL;
+        return [];
+    }
+
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $dom->loadHTML($html);
+    libxml_clear_errors();
+
+    $xpath = new DOMXPath($dom);
+    $dataList = [];
+
+    // 테이블 찾기
+    $table = $xpath->query("//table[contains(@class, 'basic_table')]")->item(0);
+
+    if ($table) {
+        // 테이블 헤더 가져오기
+        $headers = [];
+        $headerElements = $xpath->query(".//thead/tr/th", $table);
+
+        foreach ($headerElements as $header) {
+            $headers[] = trim($header->textContent);
+        }
+
+        // 테이블 바디 가져오기
+        $tbody = $xpath->query(".//tbody", $table)->item(0);
+        if ($tbody && !empty($headers)) {
+            $rows = $xpath->query(".//tr", $tbody);
+
+            if ($rows->length === 1) {
+                foreach ($headers as $header) {
+                    $rowData[$header] = "";
+                }
+                $dataList[] = (object) $rowData;
+            }else{
+                foreach ($rows as $rowIndex => $row) {
+                    $cells = $xpath->query(".//th | .//td", $row);
+                    $rowData = [];
+
+                    // 마지막 행인지 확인
+                    if ($rowIndex === $rows->length - 1) {
+                        foreach ($headers as $index => $header) {
+                            if ($index === 1) {
+                                // "매출일자"는 공백 처리
+                                $rowData[$header] = "";
+                            } else {
+                                // index가 0이면 cells[0], 그 외는 index - 1
+                                $cellIndex = $index === 0 ? 0 : $index - 1;
+                                $rowData[$header] = trim($cells->item($cellIndex)->textContent ?? "");
+                            }
+                        }
+                    } else {
+                        // 일반 데이터 행 처리
+                        foreach ($cells as $index => $cell) {
+                            $headerKey = $headers[$index] ?? "Column_$index";
+                            $rowData[$headerKey] = trim($cell->textContent);
+                        }
+                    }
+
+                    if (!empty($rowData)) {
+                        $dataList[] = (object) $rowData; // 객체로 추가 (필요에 따라 배열 형태로도 가능)
+                    }
+                }
+            }
+        }
+    }
+
+    return $dataList;
+}
+
 /**
  * Extract mining rewards from the bonus day list page.
  *
@@ -182,32 +259,39 @@ function miningReward() {
         if ($tbody && !empty($headers)) {
             $rows = $xpath->query(".//tr", $tbody);
 
-            foreach ($rows as $rowIndex => $row) {
-                $cells = $xpath->query(".//th | .//td", $row);
-                $rowData = [];
+            if ($rows->length === 1) {
+                foreach ($headers as $header) {
+                    $rowData[$header] = "";
+                }
+                $dataList[] = (object) $rowData;
+            }else{
+                foreach ($rows as $rowIndex => $row) {
+                    $cells = $xpath->query(".//th | .//td", $row);
+                    $rowData = [];
 
-                // 마지막 행인지 확인
-                if ($rowIndex === $rows->length - 1) {
-                    foreach ($headers as $index => $header) {
-                        if ($index === 1) {
-                            // "매출일자"는 공백 처리
-                            $rowData[$header] = "";
-                        } else {
-                            // index가 0이면 cells[0], 그 외는 index - 1
-                            $cellIndex = $index === 0 ? 0 : $index - 1;
-                            $rowData[$header] = trim($cells->item($cellIndex)->textContent ?? "");
+                    // 마지막 행인지 확인
+                    if ($rowIndex === $rows->length - 1) {
+                        foreach ($headers as $index => $header) {
+                            if ($index === 1) {
+                                // "매출일자"는 공백 처리
+                                $rowData[$header] = "";
+                            } else {
+                                // index가 0이면 cells[0], 그 외는 index - 1
+                                $cellIndex = $index === 0 ? 0 : $index - 1;
+                                $rowData[$header] = trim($cells->item($cellIndex)->textContent ?? "");
+                            }
+                        }
+                    } else {
+                        // 일반 데이터 행 처리
+                        foreach ($cells as $index => $cell) {
+                            $headerKey = $headers[$index] ?? "Column_$index";
+                            $rowData[$headerKey] = trim($cell->textContent);
                         }
                     }
-                } else {
-                    // 일반 데이터 행 처리
-                    foreach ($cells as $index => $cell) {
-                        $headerKey = $headers[$index] ?? "Column_$index";
-                        $rowData[$headerKey] = trim($cell->textContent);
-                    }
-                }
 
-                if (!empty($rowData)) {
-                    $dataList[] = (object) $rowData; // 객체로 추가 (필요에 따라 배열 형태로도 가능)
+                    if (!empty($rowData)) {
+                        $dataList[] = (object) $rowData; // 객체로 추가 (필요에 따라 배열 형태로도 가능)
+                    }
                 }
             }
         }
@@ -240,15 +324,21 @@ function main($username, $password) {
 
 
 // 실행
-$username = "kkckkc";
+//$username = "kkckkc";
+//$password = "k@4358220";
+
+$username = "best1";
 $password = "k@4358220";
+
 
 main($username, $password);
 
+
 //테스트
-//$miningRewardList = miningReward();
+//$miningRewardList = miningRewardTest();
 //print_r($miningRewardList);
 
+//http://finddust.ivyro.net/main.php
 
 // 필요 composer 목록
 // composer require guzzlehttp/guzzle symfony/dom-crawler symfony/css-selector monolog/monolog

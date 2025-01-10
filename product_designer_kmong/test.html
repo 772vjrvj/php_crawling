@@ -1,0 +1,1961 @@
+<html lang="en"><head><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/mt_captcha/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/turnstile/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/turnstile/hunter.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/amazon_waf/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/yandex/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/lemin/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/arkoselabs/hunter.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/arkoselabs/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/recaptcha/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/recaptcha/hunter.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/keycaptcha/hunter.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/geetest_v4/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/captcha/geetest/interceptor.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/communication_helpers.js"></script><script src="chrome-extension://ifibfemgeogfhoebkmokieepdoobkbpo/content/core_helpers.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="tyc">
+    <link rel="apple-touch-icon" href="/dashboard/logo.png">
+    <link rel="shortcut icon" href="/dashboard/logo.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script><style>.swal2-popup.swal2-toast{flex-direction:column;align-items:stretch;width:auto;padding:1.25em;overflow-y:hidden;background:#fff;box-shadow:0 0 .625em #d9d9d9}.swal2-popup.swal2-toast .swal2-header{flex-direction:row;padding:0}.swal2-popup.swal2-toast .swal2-title{flex-grow:1;justify-content:flex-start;margin:0 .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-loading{justify-content:center}.swal2-popup.swal2-toast .swal2-input{height:2em;margin:.3125em auto;font-size:1em}.swal2-popup.swal2-toast .swal2-validation-message{font-size:1em}.swal2-popup.swal2-toast .swal2-footer{margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-popup.swal2-toast .swal2-close{position:static;width:.8em;height:.8em;line-height:.8}.swal2-popup.swal2-toast .swal2-content{justify-content:flex-start;margin:0 .625em;padding:0;font-size:1em;text-align:initial}.swal2-popup.swal2-toast .swal2-html-container{padding:.625em 0 0}.swal2-popup.swal2-toast .swal2-html-container:empty{padding:0}.swal2-popup.swal2-toast .swal2-icon{width:2em;min-width:2em;height:2em;margin:0 .5em 0 0}.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:700}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{font-size:.25em}}.swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-popup.swal2-toast .swal2-actions{flex:1;flex-basis:auto!important;align-self:stretch;width:auto;height:2.2em;height:auto;margin:0 .3125em;margin-top:.3125em;padding:0}.swal2-popup.swal2-toast .swal2-styled{margin:.125em .3125em;padding:.3125em .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-styled:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(100,150,200,.5)}.swal2-popup.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;transform:rotate(45deg);border-radius:50%}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.8em;left:-.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-popup.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-toast-animate-success-line-tip .75s;animation:swal2-toast-animate-success-line-tip .75s}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-toast-animate-success-line-long .75s;animation:swal2-toast-animate-success-line-long .75s}.swal2-popup.swal2-toast.swal2-show{-webkit-animation:swal2-toast-show .5s;animation:swal2-toast-show .5s}.swal2-popup.swal2-toast.swal2-hide{-webkit-animation:swal2-toast-hide .1s forwards;animation:swal2-toast-hide .1s forwards}.swal2-container{display:flex;position:fixed;z-index:1060;top:0;right:0;bottom:0;left:0;flex-direction:row;align-items:center;justify-content:center;padding:.625em;overflow-x:hidden;transition:background-color .1s;-webkit-overflow-scrolling:touch}.swal2-container.swal2-backdrop-show,.swal2-container.swal2-noanimation{background:rgba(0,0,0,.4)}.swal2-container.swal2-backdrop-hide{background:0 0!important}.swal2-container.swal2-top{align-items:flex-start}.swal2-container.swal2-top-left,.swal2-container.swal2-top-start{align-items:flex-start;justify-content:flex-start}.swal2-container.swal2-top-end,.swal2-container.swal2-top-right{align-items:flex-start;justify-content:flex-end}.swal2-container.swal2-center{align-items:center}.swal2-container.swal2-center-left,.swal2-container.swal2-center-start{align-items:center;justify-content:flex-start}.swal2-container.swal2-center-end,.swal2-container.swal2-center-right{align-items:center;justify-content:flex-end}.swal2-container.swal2-bottom{align-items:flex-end}.swal2-container.swal2-bottom-left,.swal2-container.swal2-bottom-start{align-items:flex-end;justify-content:flex-start}.swal2-container.swal2-bottom-end,.swal2-container.swal2-bottom-right{align-items:flex-end;justify-content:flex-end}.swal2-container.swal2-bottom-end>:first-child,.swal2-container.swal2-bottom-left>:first-child,.swal2-container.swal2-bottom-right>:first-child,.swal2-container.swal2-bottom-start>:first-child,.swal2-container.swal2-bottom>:first-child{margin-top:auto}.swal2-container.swal2-grow-fullscreen>.swal2-modal{display:flex!important;flex:1;align-self:stretch;justify-content:center}.swal2-container.swal2-grow-row>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-grow-column{flex:1;flex-direction:column}.swal2-container.swal2-grow-column.swal2-bottom,.swal2-container.swal2-grow-column.swal2-center,.swal2-container.swal2-grow-column.swal2-top{align-items:center}.swal2-container.swal2-grow-column.swal2-bottom-left,.swal2-container.swal2-grow-column.swal2-bottom-start,.swal2-container.swal2-grow-column.swal2-center-left,.swal2-container.swal2-grow-column.swal2-center-start,.swal2-container.swal2-grow-column.swal2-top-left,.swal2-container.swal2-grow-column.swal2-top-start{align-items:flex-start}.swal2-container.swal2-grow-column.swal2-bottom-end,.swal2-container.swal2-grow-column.swal2-bottom-right,.swal2-container.swal2-grow-column.swal2-center-end,.swal2-container.swal2-grow-column.swal2-center-right,.swal2-container.swal2-grow-column.swal2-top-end,.swal2-container.swal2-grow-column.swal2-top-right{align-items:flex-end}.swal2-container.swal2-grow-column>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-no-transition{transition:none!important}.swal2-container:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen)>.swal2-modal{margin:auto}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-container .swal2-modal{margin:0!important}}.swal2-popup{display:none;position:relative;box-sizing:border-box;flex-direction:column;justify-content:center;width:32em;max-width:100%;padding:1.25em;border:none;border-radius:5px;background:#fff;font-family:inherit;font-size:1rem}.swal2-popup:focus{outline:0}.swal2-popup.swal2-loading{overflow-y:hidden}.swal2-header{display:flex;flex-direction:column;align-items:center;padding:0 1.8em}.swal2-title{position:relative;max-width:100%;margin:0 0 .4em;padding:0;color:#595959;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;word-wrap:break-word}.swal2-actions{display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:center;width:100%;margin:1.25em auto 0;padding:0}.swal2-actions:not(.swal2-loading) .swal2-styled[disabled]{opacity:.4}.swal2-actions:not(.swal2-loading) .swal2-styled:hover{background-image:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1))}.swal2-actions:not(.swal2-loading) .swal2-styled:active{background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2))}.swal2-loader{display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;-webkit-animation:swal2-rotate-loading 1.5s linear 0s infinite normal;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 transparent #2778c4 transparent}.swal2-styled{margin:.3125em;padding:.625em 1.1em;box-shadow:none;font-weight:500}.swal2-styled:not([disabled]){cursor:pointer}.swal2-styled.swal2-confirm{border:0;border-radius:.25em;background:initial;background-color:#2778c4;color:#fff;font-size:1em}.swal2-styled.swal2-deny{border:0;border-radius:.25em;background:initial;background-color:#d14529;color:#fff;font-size:1em}.swal2-styled.swal2-cancel{border:0;border-radius:.25em;background:initial;background-color:#757575;color:#fff;font-size:1em}.swal2-styled:focus{outline:0;box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-styled::-moz-focus-inner{border:0}.swal2-footer{justify-content:center;margin:1.25em 0 0;padding:1em 0 0;border-top:1px solid #eee;color:#545454;font-size:1em}.swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;height:.25em;overflow:hidden;border-bottom-right-radius:5px;border-bottom-left-radius:5px}.swal2-timer-progress-bar{width:100%;height:.25em;background:rgba(0,0,0,.2)}.swal2-image{max-width:100%;margin:1.25em auto}.swal2-close{position:absolute;z-index:2;top:0;right:0;align-items:center;justify-content:center;width:1.2em;height:1.2em;padding:0;overflow:hidden;transition:color .1s ease-out;border:none;border-radius:5px;background:0 0;color:#ccc;font-family:serif;font-size:2.5em;line-height:1.2;cursor:pointer}.swal2-close:hover{transform:none;background:0 0;color:#f27474}.swal2-close:focus{outline:0;box-shadow:inset 0 0 0 3px rgba(100,150,200,.5)}.swal2-close::-moz-focus-inner{border:0}.swal2-content{z-index:1;justify-content:center;margin:0;padding:0 1.6em;color:#545454;font-size:1.125em;font-weight:400;line-height:normal;text-align:center;word-wrap:break-word}.swal2-checkbox,.swal2-file,.swal2-input,.swal2-radio,.swal2-select,.swal2-textarea{margin:1em auto}.swal2-file,.swal2-input,.swal2-textarea{box-sizing:border-box;width:100%;transition:border-color .3s,box-shadow .3s;border:1px solid #d9d9d9;border-radius:.1875em;background:inherit;box-shadow:inset 0 1px 1px rgba(0,0,0,.06);color:inherit;font-size:1.125em}.swal2-file.swal2-inputerror,.swal2-input.swal2-inputerror,.swal2-textarea.swal2-inputerror{border-color:#f27474!important;box-shadow:0 0 2px #f27474!important}.swal2-file:focus,.swal2-input:focus,.swal2-textarea:focus{border:1px solid #b4dbed;outline:0;box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-file::-moz-placeholder,.swal2-input::-moz-placeholder,.swal2-textarea::-moz-placeholder{color:#ccc}.swal2-file:-ms-input-placeholder,.swal2-input:-ms-input-placeholder,.swal2-textarea:-ms-input-placeholder{color:#ccc}.swal2-file::placeholder,.swal2-input::placeholder,.swal2-textarea::placeholder{color:#ccc}.swal2-range{margin:1em auto;background:#fff}.swal2-range input{width:80%}.swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}.swal2-range input,.swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}.swal2-input{height:2.625em;padding:0 .75em}.swal2-input[type=number]{max-width:10em}.swal2-file{background:inherit;font-size:1.125em}.swal2-textarea{height:6.75em;padding:.75em}.swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:inherit;color:inherit;font-size:1.125em}.swal2-checkbox,.swal2-radio{align-items:center;justify-content:center;background:#fff;color:inherit}.swal2-checkbox label,.swal2-radio label{margin:0 .6em;font-size:1.125em}.swal2-checkbox input,.swal2-radio input{flex-shrink:0;margin:0 .4em}.swal2-input-label{display:flex;justify-content:center;margin:1em auto}.swal2-validation-message{align-items:center;justify-content:center;margin:0 -2.7em;padding:.625em;overflow:hidden;background:#f0f0f0;color:#666;font-size:1em;font-weight:300}.swal2-validation-message::before{content:"!";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}.swal2-icon{position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:1.25em auto 1.875em;border:.25em solid transparent;border-radius:50%;border-color:#000;font-family:inherit;line-height:5em;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}.swal2-icon.swal2-error{border-color:#f27474;color:#f27474}.swal2-icon.swal2-error .swal2-x-mark{position:relative;flex-grow:1}.swal2-icon.swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}.swal2-icon.swal2-error.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-error.swal2-icon-show .swal2-x-mark{-webkit-animation:swal2-animate-error-x-mark .5s;animation:swal2-animate-error-x-mark .5s}.swal2-icon.swal2-warning{border-color:#facea8;color:#f8bb86}.swal2-icon.swal2-info{border-color:#9de0f6;color:#3fc3ee}.swal2-icon.swal2-question{border-color:#c9dae1;color:#87adbd}.swal2-icon.swal2-success{border-color:#a5dc86;color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;transform:rotate(45deg);border-radius:50%}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}.swal2-icon.swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-.25em;left:-.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}.swal2-icon.swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}.swal2-icon.swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}.swal2-icon.swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-animate-success-line-tip .75s;animation:swal2-animate-success-line-tip .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-animate-success-line-long .75s;animation:swal2-animate-success-line-long .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-circular-line-right{-webkit-animation:swal2-rotate-success-circular-line 4.25s ease-in;animation:swal2-rotate-success-circular-line 4.25s ease-in}.swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:0 0 1.25em;padding:0;background:inherit;font-weight:600}.swal2-progress-steps li{display:inline-block;position:relative}.swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:#add8e6;color:#fff}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:#add8e6}.swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}[class^=swal2]{-webkit-tap-highlight-color:transparent}.swal2-show{-webkit-animation:swal2-show .3s;animation:swal2-show .3s}.swal2-hide{-webkit-animation:swal2-hide .15s forwards;animation:swal2-hide .15s forwards}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{right:auto;left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}@supports (-ms-accelerator:true){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@-webkit-keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@-webkit-keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@-webkit-keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@-webkit-keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@-webkit-keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@-webkit-keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@-webkit-keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@-webkit-keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@-webkit-keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@-webkit-keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@-webkit-keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@-webkit-keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto!important}body.swal2-no-backdrop .swal2-container{top:auto;right:auto;bottom:auto;left:auto;max-width:calc(100% - .625em * 2);background-color:transparent!important}body.swal2-no-backdrop .swal2-container>.swal2-modal{box-shadow:0 0 10px rgba(0,0,0,.4)}body.swal2-no-backdrop .swal2-container.swal2-top{top:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-top-left,body.swal2-no-backdrop .swal2-container.swal2-top-start{top:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-top-end,body.swal2-no-backdrop .swal2-container.swal2-top-right{top:0;right:0}body.swal2-no-backdrop .swal2-container.swal2-center{top:50%;left:50%;transform:translate(-50%,-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-left,body.swal2-no-backdrop .swal2-container.swal2-center-start{top:50%;left:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-end,body.swal2-no-backdrop .swal2-container.swal2-center-right{top:50%;right:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom{bottom:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom-left,body.swal2-no-backdrop .swal2-container.swal2-bottom-start{bottom:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-bottom-end,body.swal2-no-backdrop .swal2-container.swal2-bottom-right{right:0;bottom:0}@media print{body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow-y:scroll!important}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) .swal2-container{position:static!important}}body.swal2-toast-shown .swal2-container{background-color:transparent}body.swal2-toast-shown .swal2-container.swal2-top{top:0;right:auto;bottom:auto;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{top:0;right:0;bottom:auto;left:auto}body.swal2-toast-shown .swal2-container.swal2-top-left,body.swal2-toast-shown .swal2-container.swal2-top-start{top:0;right:auto;bottom:auto;left:0}body.swal2-toast-shown .swal2-container.swal2-center-left,body.swal2-toast-shown .swal2-container.swal2-center-start{top:50%;right:auto;bottom:auto;left:0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{top:50%;right:auto;bottom:auto;left:50%;transform:translate(-50%,-50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{top:50%;right:0;bottom:auto;left:auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-left,body.swal2-toast-shown .swal2-container.swal2-bottom-start{top:auto;right:auto;bottom:0;left:0}body.swal2-toast-shown .swal2-container.swal2-bottom{top:auto;right:auto;bottom:0;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{top:auto;right:0;bottom:0;left:auto}</style>
+    <title>TYC</title>
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/font-awesome.css">
+    <!-- ico-font-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/icofont.css">
+    <!-- Themify icon-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/themify.css">
+    <!-- Flag icon-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/flag-icon.css">
+    <!-- Feather icon-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/feather-icon.css">
+    <!-- Plugins css start-->
+    <!-- Plugins css Ends-->
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/bootstrap.css">
+    <!-- App css-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/style.css">
+    <link id="color" rel="stylesheet" href="/dashboard/assets/css/color-1.css" media="screen">
+    <!-- Responsive css-->
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/responsive.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script><style>.swal2-popup.swal2-toast{flex-direction:column;align-items:stretch;width:auto;padding:1.25em;overflow-y:hidden;background:#fff;box-shadow:0 0 .625em #d9d9d9}.swal2-popup.swal2-toast .swal2-header{flex-direction:row;padding:0}.swal2-popup.swal2-toast .swal2-title{flex-grow:1;justify-content:flex-start;margin:0 .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-loading{justify-content:center}.swal2-popup.swal2-toast .swal2-input{height:2em;margin:.3125em auto;font-size:1em}.swal2-popup.swal2-toast .swal2-validation-message{font-size:1em}.swal2-popup.swal2-toast .swal2-footer{margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-popup.swal2-toast .swal2-close{position:static;width:.8em;height:.8em;line-height:.8}.swal2-popup.swal2-toast .swal2-content{justify-content:flex-start;margin:0 .625em;padding:0;font-size:1em;text-align:initial}.swal2-popup.swal2-toast .swal2-html-container{padding:.625em 0 0}.swal2-popup.swal2-toast .swal2-html-container:empty{padding:0}.swal2-popup.swal2-toast .swal2-icon{width:2em;min-width:2em;height:2em;margin:0 .5em 0 0}.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:700}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{font-size:.25em}}.swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-popup.swal2-toast .swal2-actions{flex:1;flex-basis:auto!important;align-self:stretch;width:auto;height:2.2em;height:auto;margin:0 .3125em;margin-top:.3125em;padding:0}.swal2-popup.swal2-toast .swal2-styled{margin:.125em .3125em;padding:.3125em .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-styled:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(100,150,200,.5)}.swal2-popup.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;transform:rotate(45deg);border-radius:50%}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.8em;left:-.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-popup.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-toast-animate-success-line-tip .75s;animation:swal2-toast-animate-success-line-tip .75s}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-toast-animate-success-line-long .75s;animation:swal2-toast-animate-success-line-long .75s}.swal2-popup.swal2-toast.swal2-show{-webkit-animation:swal2-toast-show .5s;animation:swal2-toast-show .5s}.swal2-popup.swal2-toast.swal2-hide{-webkit-animation:swal2-toast-hide .1s forwards;animation:swal2-toast-hide .1s forwards}.swal2-container{display:flex;position:fixed;z-index:1060;top:0;right:0;bottom:0;left:0;flex-direction:row;align-items:center;justify-content:center;padding:.625em;overflow-x:hidden;transition:background-color .1s;-webkit-overflow-scrolling:touch}.swal2-container.swal2-backdrop-show,.swal2-container.swal2-noanimation{background:rgba(0,0,0,.4)}.swal2-container.swal2-backdrop-hide{background:0 0!important}.swal2-container.swal2-top{align-items:flex-start}.swal2-container.swal2-top-left,.swal2-container.swal2-top-start{align-items:flex-start;justify-content:flex-start}.swal2-container.swal2-top-end,.swal2-container.swal2-top-right{align-items:flex-start;justify-content:flex-end}.swal2-container.swal2-center{align-items:center}.swal2-container.swal2-center-left,.swal2-container.swal2-center-start{align-items:center;justify-content:flex-start}.swal2-container.swal2-center-end,.swal2-container.swal2-center-right{align-items:center;justify-content:flex-end}.swal2-container.swal2-bottom{align-items:flex-end}.swal2-container.swal2-bottom-left,.swal2-container.swal2-bottom-start{align-items:flex-end;justify-content:flex-start}.swal2-container.swal2-bottom-end,.swal2-container.swal2-bottom-right{align-items:flex-end;justify-content:flex-end}.swal2-container.swal2-bottom-end>:first-child,.swal2-container.swal2-bottom-left>:first-child,.swal2-container.swal2-bottom-right>:first-child,.swal2-container.swal2-bottom-start>:first-child,.swal2-container.swal2-bottom>:first-child{margin-top:auto}.swal2-container.swal2-grow-fullscreen>.swal2-modal{display:flex!important;flex:1;align-self:stretch;justify-content:center}.swal2-container.swal2-grow-row>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-grow-column{flex:1;flex-direction:column}.swal2-container.swal2-grow-column.swal2-bottom,.swal2-container.swal2-grow-column.swal2-center,.swal2-container.swal2-grow-column.swal2-top{align-items:center}.swal2-container.swal2-grow-column.swal2-bottom-left,.swal2-container.swal2-grow-column.swal2-bottom-start,.swal2-container.swal2-grow-column.swal2-center-left,.swal2-container.swal2-grow-column.swal2-center-start,.swal2-container.swal2-grow-column.swal2-top-left,.swal2-container.swal2-grow-column.swal2-top-start{align-items:flex-start}.swal2-container.swal2-grow-column.swal2-bottom-end,.swal2-container.swal2-grow-column.swal2-bottom-right,.swal2-container.swal2-grow-column.swal2-center-end,.swal2-container.swal2-grow-column.swal2-center-right,.swal2-container.swal2-grow-column.swal2-top-end,.swal2-container.swal2-grow-column.swal2-top-right{align-items:flex-end}.swal2-container.swal2-grow-column>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-no-transition{transition:none!important}.swal2-container:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen)>.swal2-modal{margin:auto}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-container .swal2-modal{margin:0!important}}.swal2-popup{display:none;position:relative;box-sizing:border-box;flex-direction:column;justify-content:center;width:32em;max-width:100%;padding:1.25em;border:none;border-radius:5px;background:#fff;font-family:inherit;font-size:1rem}.swal2-popup:focus{outline:0}.swal2-popup.swal2-loading{overflow-y:hidden}.swal2-header{display:flex;flex-direction:column;align-items:center;padding:0 1.8em}.swal2-title{position:relative;max-width:100%;margin:0 0 .4em;padding:0;color:#595959;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;word-wrap:break-word}.swal2-actions{display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:center;width:100%;margin:1.25em auto 0;padding:0}.swal2-actions:not(.swal2-loading) .swal2-styled[disabled]{opacity:.4}.swal2-actions:not(.swal2-loading) .swal2-styled:hover{background-image:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1))}.swal2-actions:not(.swal2-loading) .swal2-styled:active{background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2))}.swal2-loader{display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;-webkit-animation:swal2-rotate-loading 1.5s linear 0s infinite normal;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 transparent #2778c4 transparent}.swal2-styled{margin:.3125em;padding:.625em 1.1em;box-shadow:none;font-weight:500}.swal2-styled:not([disabled]){cursor:pointer}.swal2-styled.swal2-confirm{border:0;border-radius:.25em;background:initial;background-color:#2778c4;color:#fff;font-size:1em}.swal2-styled.swal2-deny{border:0;border-radius:.25em;background:initial;background-color:#d14529;color:#fff;font-size:1em}.swal2-styled.swal2-cancel{border:0;border-radius:.25em;background:initial;background-color:#757575;color:#fff;font-size:1em}.swal2-styled:focus{outline:0;box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-styled::-moz-focus-inner{border:0}.swal2-footer{justify-content:center;margin:1.25em 0 0;padding:1em 0 0;border-top:1px solid #eee;color:#545454;font-size:1em}.swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;height:.25em;overflow:hidden;border-bottom-right-radius:5px;border-bottom-left-radius:5px}.swal2-timer-progress-bar{width:100%;height:.25em;background:rgba(0,0,0,.2)}.swal2-image{max-width:100%;margin:1.25em auto}.swal2-close{position:absolute;z-index:2;top:0;right:0;align-items:center;justify-content:center;width:1.2em;height:1.2em;padding:0;overflow:hidden;transition:color .1s ease-out;border:none;border-radius:5px;background:0 0;color:#ccc;font-family:serif;font-size:2.5em;line-height:1.2;cursor:pointer}.swal2-close:hover{transform:none;background:0 0;color:#f27474}.swal2-close:focus{outline:0;box-shadow:inset 0 0 0 3px rgba(100,150,200,.5)}.swal2-close::-moz-focus-inner{border:0}.swal2-content{z-index:1;justify-content:center;margin:0;padding:0 1.6em;color:#545454;font-size:1.125em;font-weight:400;line-height:normal;text-align:center;word-wrap:break-word}.swal2-checkbox,.swal2-file,.swal2-input,.swal2-radio,.swal2-select,.swal2-textarea{margin:1em auto}.swal2-file,.swal2-input,.swal2-textarea{box-sizing:border-box;width:100%;transition:border-color .3s,box-shadow .3s;border:1px solid #d9d9d9;border-radius:.1875em;background:inherit;box-shadow:inset 0 1px 1px rgba(0,0,0,.06);color:inherit;font-size:1.125em}.swal2-file.swal2-inputerror,.swal2-input.swal2-inputerror,.swal2-textarea.swal2-inputerror{border-color:#f27474!important;box-shadow:0 0 2px #f27474!important}.swal2-file:focus,.swal2-input:focus,.swal2-textarea:focus{border:1px solid #b4dbed;outline:0;box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-file::-moz-placeholder,.swal2-input::-moz-placeholder,.swal2-textarea::-moz-placeholder{color:#ccc}.swal2-file:-ms-input-placeholder,.swal2-input:-ms-input-placeholder,.swal2-textarea:-ms-input-placeholder{color:#ccc}.swal2-file::placeholder,.swal2-input::placeholder,.swal2-textarea::placeholder{color:#ccc}.swal2-range{margin:1em auto;background:#fff}.swal2-range input{width:80%}.swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}.swal2-range input,.swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}.swal2-input{height:2.625em;padding:0 .75em}.swal2-input[type=number]{max-width:10em}.swal2-file{background:inherit;font-size:1.125em}.swal2-textarea{height:6.75em;padding:.75em}.swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:inherit;color:inherit;font-size:1.125em}.swal2-checkbox,.swal2-radio{align-items:center;justify-content:center;background:#fff;color:inherit}.swal2-checkbox label,.swal2-radio label{margin:0 .6em;font-size:1.125em}.swal2-checkbox input,.swal2-radio input{flex-shrink:0;margin:0 .4em}.swal2-input-label{display:flex;justify-content:center;margin:1em auto}.swal2-validation-message{align-items:center;justify-content:center;margin:0 -2.7em;padding:.625em;overflow:hidden;background:#f0f0f0;color:#666;font-size:1em;font-weight:300}.swal2-validation-message::before{content:"!";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}.swal2-icon{position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:1.25em auto 1.875em;border:.25em solid transparent;border-radius:50%;border-color:#000;font-family:inherit;line-height:5em;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}.swal2-icon.swal2-error{border-color:#f27474;color:#f27474}.swal2-icon.swal2-error .swal2-x-mark{position:relative;flex-grow:1}.swal2-icon.swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}.swal2-icon.swal2-error.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-error.swal2-icon-show .swal2-x-mark{-webkit-animation:swal2-animate-error-x-mark .5s;animation:swal2-animate-error-x-mark .5s}.swal2-icon.swal2-warning{border-color:#facea8;color:#f8bb86}.swal2-icon.swal2-info{border-color:#9de0f6;color:#3fc3ee}.swal2-icon.swal2-question{border-color:#c9dae1;color:#87adbd}.swal2-icon.swal2-success{border-color:#a5dc86;color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;transform:rotate(45deg);border-radius:50%}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}.swal2-icon.swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-.25em;left:-.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}.swal2-icon.swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}.swal2-icon.swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}.swal2-icon.swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-animate-success-line-tip .75s;animation:swal2-animate-success-line-tip .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-animate-success-line-long .75s;animation:swal2-animate-success-line-long .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-circular-line-right{-webkit-animation:swal2-rotate-success-circular-line 4.25s ease-in;animation:swal2-rotate-success-circular-line 4.25s ease-in}.swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:0 0 1.25em;padding:0;background:inherit;font-weight:600}.swal2-progress-steps li{display:inline-block;position:relative}.swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:#add8e6;color:#fff}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:#add8e6}.swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}[class^=swal2]{-webkit-tap-highlight-color:transparent}.swal2-show{-webkit-animation:swal2-show .3s;animation:swal2-show .3s}.swal2-hide{-webkit-animation:swal2-hide .15s forwards;animation:swal2-hide .15s forwards}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{right:auto;left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}@supports (-ms-accelerator:true){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@-webkit-keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@-webkit-keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@-webkit-keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@-webkit-keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@-webkit-keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@-webkit-keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@-webkit-keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@-webkit-keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@-webkit-keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@-webkit-keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@-webkit-keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@-webkit-keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto!important}body.swal2-no-backdrop .swal2-container{top:auto;right:auto;bottom:auto;left:auto;max-width:calc(100% - .625em * 2);background-color:transparent!important}body.swal2-no-backdrop .swal2-container>.swal2-modal{box-shadow:0 0 10px rgba(0,0,0,.4)}body.swal2-no-backdrop .swal2-container.swal2-top{top:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-top-left,body.swal2-no-backdrop .swal2-container.swal2-top-start{top:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-top-end,body.swal2-no-backdrop .swal2-container.swal2-top-right{top:0;right:0}body.swal2-no-backdrop .swal2-container.swal2-center{top:50%;left:50%;transform:translate(-50%,-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-left,body.swal2-no-backdrop .swal2-container.swal2-center-start{top:50%;left:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-end,body.swal2-no-backdrop .swal2-container.swal2-center-right{top:50%;right:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom{bottom:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom-left,body.swal2-no-backdrop .swal2-container.swal2-bottom-start{bottom:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-bottom-end,body.swal2-no-backdrop .swal2-container.swal2-bottom-right{right:0;bottom:0}@media print{body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow-y:scroll!important}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) .swal2-container{position:static!important}}body.swal2-toast-shown .swal2-container{background-color:transparent}body.swal2-toast-shown .swal2-container.swal2-top{top:0;right:auto;bottom:auto;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{top:0;right:0;bottom:auto;left:auto}body.swal2-toast-shown .swal2-container.swal2-top-left,body.swal2-toast-shown .swal2-container.swal2-top-start{top:0;right:auto;bottom:auto;left:0}body.swal2-toast-shown .swal2-container.swal2-center-left,body.swal2-toast-shown .swal2-container.swal2-center-start{top:50%;right:auto;bottom:auto;left:0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{top:50%;right:auto;bottom:auto;left:50%;transform:translate(-50%,-50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{top:50%;right:0;bottom:auto;left:auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-left,body.swal2-toast-shown .swal2-container.swal2-bottom-start{top:auto;right:auto;bottom:0;left:0}body.swal2-toast-shown .swal2-container.swal2-bottom{top:auto;right:auto;bottom:0;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{top:auto;right:0;bottom:0;left:auto}</style>
+
+    <style>.swal2-popup.swal2-toast{flex-direction:column;align-items:stretch;width:auto;padding:1.25em;overflow-y:hidden;background:#fff;box-shadow:0 0 .625em #d9d9d9}.swal2-popup.swal2-toast .swal2-header{flex-direction:row;padding:0}.swal2-popup.swal2-toast .swal2-title{flex-grow:1;justify-content:flex-start;margin:0 .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-loading{justify-content:center}.swal2-popup.swal2-toast .swal2-input{height:2em;margin:.3125em auto;font-size:1em}.swal2-popup.swal2-toast .swal2-validation-message{font-size:1em}.swal2-popup.swal2-toast .swal2-footer{margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-popup.swal2-toast .swal2-close{position:static;width:.8em;height:.8em;line-height:.8}.swal2-popup.swal2-toast .swal2-content{justify-content:flex-start;margin:0 .625em;padding:0;font-size:1em;text-align:initial}.swal2-popup.swal2-toast .swal2-html-container{padding:.625em 0 0}.swal2-popup.swal2-toast .swal2-html-container:empty{padding:0}.swal2-popup.swal2-toast .swal2-icon{width:2em;min-width:2em;height:2em;margin:0 .5em 0 0}.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:700}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{font-size:.25em}}.swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-popup.swal2-toast .swal2-actions{flex:1;flex-basis:auto!important;align-self:stretch;width:auto;height:2.2em;height:auto;margin:0 .3125em;margin-top:.3125em;padding:0}.swal2-popup.swal2-toast .swal2-styled{margin:.125em .3125em;padding:.3125em .625em;font-size:1em}.swal2-popup.swal2-toast .swal2-styled:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px rgba(100,150,200,.5)}.swal2-popup.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;transform:rotate(45deg);border-radius:50%}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.8em;left:-.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-popup.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-toast-animate-success-line-tip .75s;animation:swal2-toast-animate-success-line-tip .75s}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-toast-animate-success-line-long .75s;animation:swal2-toast-animate-success-line-long .75s}.swal2-popup.swal2-toast.swal2-show{-webkit-animation:swal2-toast-show .5s;animation:swal2-toast-show .5s}.swal2-popup.swal2-toast.swal2-hide{-webkit-animation:swal2-toast-hide .1s forwards;animation:swal2-toast-hide .1s forwards}.swal2-container{display:flex;position:fixed;z-index:1060;top:0;right:0;bottom:0;left:0;flex-direction:row;align-items:center;justify-content:center;padding:.625em;overflow-x:hidden;transition:background-color .1s;-webkit-overflow-scrolling:touch}.swal2-container.swal2-backdrop-show,.swal2-container.swal2-noanimation{background:rgba(0,0,0,.4)}.swal2-container.swal2-backdrop-hide{background:0 0!important}.swal2-container.swal2-top{align-items:flex-start}.swal2-container.swal2-top-left,.swal2-container.swal2-top-start{align-items:flex-start;justify-content:flex-start}.swal2-container.swal2-top-end,.swal2-container.swal2-top-right{align-items:flex-start;justify-content:flex-end}.swal2-container.swal2-center{align-items:center}.swal2-container.swal2-center-left,.swal2-container.swal2-center-start{align-items:center;justify-content:flex-start}.swal2-container.swal2-center-end,.swal2-container.swal2-center-right{align-items:center;justify-content:flex-end}.swal2-container.swal2-bottom{align-items:flex-end}.swal2-container.swal2-bottom-left,.swal2-container.swal2-bottom-start{align-items:flex-end;justify-content:flex-start}.swal2-container.swal2-bottom-end,.swal2-container.swal2-bottom-right{align-items:flex-end;justify-content:flex-end}.swal2-container.swal2-bottom-end>:first-child,.swal2-container.swal2-bottom-left>:first-child,.swal2-container.swal2-bottom-right>:first-child,.swal2-container.swal2-bottom-start>:first-child,.swal2-container.swal2-bottom>:first-child{margin-top:auto}.swal2-container.swal2-grow-fullscreen>.swal2-modal{display:flex!important;flex:1;align-self:stretch;justify-content:center}.swal2-container.swal2-grow-row>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-grow-column{flex:1;flex-direction:column}.swal2-container.swal2-grow-column.swal2-bottom,.swal2-container.swal2-grow-column.swal2-center,.swal2-container.swal2-grow-column.swal2-top{align-items:center}.swal2-container.swal2-grow-column.swal2-bottom-left,.swal2-container.swal2-grow-column.swal2-bottom-start,.swal2-container.swal2-grow-column.swal2-center-left,.swal2-container.swal2-grow-column.swal2-center-start,.swal2-container.swal2-grow-column.swal2-top-left,.swal2-container.swal2-grow-column.swal2-top-start{align-items:flex-start}.swal2-container.swal2-grow-column.swal2-bottom-end,.swal2-container.swal2-grow-column.swal2-bottom-right,.swal2-container.swal2-grow-column.swal2-center-end,.swal2-container.swal2-grow-column.swal2-center-right,.swal2-container.swal2-grow-column.swal2-top-end,.swal2-container.swal2-grow-column.swal2-top-right{align-items:flex-end}.swal2-container.swal2-grow-column>.swal2-modal{display:flex!important;flex:1;align-content:center;justify-content:center}.swal2-container.swal2-no-transition{transition:none!important}.swal2-container:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen)>.swal2-modal{margin:auto}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-container .swal2-modal{margin:0!important}}.swal2-popup{display:none;position:relative;box-sizing:border-box;flex-direction:column;justify-content:center;width:32em;max-width:100%;padding:1.25em;border:none;border-radius:5px;background:#fff;font-family:inherit;font-size:1rem}.swal2-popup:focus{outline:0}.swal2-popup.swal2-loading{overflow-y:hidden}.swal2-header{display:flex;flex-direction:column;align-items:center;padding:0 1.8em}.swal2-title{position:relative;max-width:100%;margin:0 0 .4em;padding:0;color:#595959;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;word-wrap:break-word}.swal2-actions{display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:center;width:100%;margin:1.25em auto 0;padding:0}.swal2-actions:not(.swal2-loading) .swal2-styled[disabled]{opacity:.4}.swal2-actions:not(.swal2-loading) .swal2-styled:hover{background-image:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1))}.swal2-actions:not(.swal2-loading) .swal2-styled:active{background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2))}.swal2-loader{display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;-webkit-animation:swal2-rotate-loading 1.5s linear 0s infinite normal;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 transparent #2778c4 transparent}.swal2-styled{margin:.3125em;padding:.625em 1.1em;box-shadow:none;font-weight:500}.swal2-styled:not([disabled]){cursor:pointer}.swal2-styled.swal2-confirm{border:0;border-radius:.25em;background:initial;background-color:#2778c4;color:#fff;font-size:1em}.swal2-styled.swal2-deny{border:0;border-radius:.25em;background:initial;background-color:#d14529;color:#fff;font-size:1em}.swal2-styled.swal2-cancel{border:0;border-radius:.25em;background:initial;background-color:#757575;color:#fff;font-size:1em}.swal2-styled:focus{outline:0;box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-styled::-moz-focus-inner{border:0}.swal2-footer{justify-content:center;margin:1.25em 0 0;padding:1em 0 0;border-top:1px solid #eee;color:#545454;font-size:1em}.swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;height:.25em;overflow:hidden;border-bottom-right-radius:5px;border-bottom-left-radius:5px}.swal2-timer-progress-bar{width:100%;height:.25em;background:rgba(0,0,0,.2)}.swal2-image{max-width:100%;margin:1.25em auto}.swal2-close{position:absolute;z-index:2;top:0;right:0;align-items:center;justify-content:center;width:1.2em;height:1.2em;padding:0;overflow:hidden;transition:color .1s ease-out;border:none;border-radius:5px;background:0 0;color:#ccc;font-family:serif;font-size:2.5em;line-height:1.2;cursor:pointer}.swal2-close:hover{transform:none;background:0 0;color:#f27474}.swal2-close:focus{outline:0;box-shadow:inset 0 0 0 3px rgba(100,150,200,.5)}.swal2-close::-moz-focus-inner{border:0}.swal2-content{z-index:1;justify-content:center;margin:0;padding:0 1.6em;color:#545454;font-size:1.125em;font-weight:400;line-height:normal;text-align:center;word-wrap:break-word}.swal2-checkbox,.swal2-file,.swal2-input,.swal2-radio,.swal2-select,.swal2-textarea{margin:1em auto}.swal2-file,.swal2-input,.swal2-textarea{box-sizing:border-box;width:100%;transition:border-color .3s,box-shadow .3s;border:1px solid #d9d9d9;border-radius:.1875em;background:inherit;box-shadow:inset 0 1px 1px rgba(0,0,0,.06);color:inherit;font-size:1.125em}.swal2-file.swal2-inputerror,.swal2-input.swal2-inputerror,.swal2-textarea.swal2-inputerror{border-color:#f27474!important;box-shadow:0 0 2px #f27474!important}.swal2-file:focus,.swal2-input:focus,.swal2-textarea:focus{border:1px solid #b4dbed;outline:0;box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-file::-moz-placeholder,.swal2-input::-moz-placeholder,.swal2-textarea::-moz-placeholder{color:#ccc}.swal2-file:-ms-input-placeholder,.swal2-input:-ms-input-placeholder,.swal2-textarea:-ms-input-placeholder{color:#ccc}.swal2-file::placeholder,.swal2-input::placeholder,.swal2-textarea::placeholder{color:#ccc}.swal2-range{margin:1em auto;background:#fff}.swal2-range input{width:80%}.swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}.swal2-range input,.swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}.swal2-input{height:2.625em;padding:0 .75em}.swal2-input[type=number]{max-width:10em}.swal2-file{background:inherit;font-size:1.125em}.swal2-textarea{height:6.75em;padding:.75em}.swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:inherit;color:inherit;font-size:1.125em}.swal2-checkbox,.swal2-radio{align-items:center;justify-content:center;background:#fff;color:inherit}.swal2-checkbox label,.swal2-radio label{margin:0 .6em;font-size:1.125em}.swal2-checkbox input,.swal2-radio input{flex-shrink:0;margin:0 .4em}.swal2-input-label{display:flex;justify-content:center;margin:1em auto}.swal2-validation-message{align-items:center;justify-content:center;margin:0 -2.7em;padding:.625em;overflow:hidden;background:#f0f0f0;color:#666;font-size:1em;font-weight:300}.swal2-validation-message::before{content:"!";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}.swal2-icon{position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:1.25em auto 1.875em;border:.25em solid transparent;border-radius:50%;border-color:#000;font-family:inherit;line-height:5em;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}.swal2-icon.swal2-error{border-color:#f27474;color:#f27474}.swal2-icon.swal2-error .swal2-x-mark{position:relative;flex-grow:1}.swal2-icon.swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}.swal2-icon.swal2-error.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-error.swal2-icon-show .swal2-x-mark{-webkit-animation:swal2-animate-error-x-mark .5s;animation:swal2-animate-error-x-mark .5s}.swal2-icon.swal2-warning{border-color:#facea8;color:#f8bb86}.swal2-icon.swal2-info{border-color:#9de0f6;color:#3fc3ee}.swal2-icon.swal2-question{border-color:#c9dae1;color:#87adbd}.swal2-icon.swal2-success{border-color:#a5dc86;color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;transform:rotate(45deg);border-radius:50%}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}.swal2-icon.swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-.25em;left:-.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}.swal2-icon.swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}.swal2-icon.swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}.swal2-icon.swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-animate-success-line-tip .75s;animation:swal2-animate-success-line-tip .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-animate-success-line-long .75s;animation:swal2-animate-success-line-long .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-circular-line-right{-webkit-animation:swal2-rotate-success-circular-line 4.25s ease-in;animation:swal2-rotate-success-circular-line 4.25s ease-in}.swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:0 0 1.25em;padding:0;background:inherit;font-weight:600}.swal2-progress-steps li{display:inline-block;position:relative}.swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:#add8e6;color:#fff}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:#add8e6}.swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}[class^=swal2]{-webkit-tap-highlight-color:transparent}.swal2-show{-webkit-animation:swal2-show .3s;animation:swal2-show .3s}.swal2-hide{-webkit-animation:swal2-hide .15s forwards;animation:swal2-hide .15s forwards}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{right:auto;left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}@supports (-ms-accelerator:true){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){.swal2-range input{width:100%!important}.swal2-range output{display:none}}@-webkit-keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@-webkit-keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@-webkit-keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@-webkit-keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@-webkit-keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@-webkit-keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@-webkit-keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@-webkit-keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@-webkit-keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@-webkit-keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@-webkit-keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@-webkit-keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto!important}body.swal2-no-backdrop .swal2-container{top:auto;right:auto;bottom:auto;left:auto;max-width:calc(100% - .625em * 2);background-color:transparent!important}body.swal2-no-backdrop .swal2-container>.swal2-modal{box-shadow:0 0 10px rgba(0,0,0,.4)}body.swal2-no-backdrop .swal2-container.swal2-top{top:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-top-left,body.swal2-no-backdrop .swal2-container.swal2-top-start{top:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-top-end,body.swal2-no-backdrop .swal2-container.swal2-top-right{top:0;right:0}body.swal2-no-backdrop .swal2-container.swal2-center{top:50%;left:50%;transform:translate(-50%,-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-left,body.swal2-no-backdrop .swal2-container.swal2-center-start{top:50%;left:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-center-end,body.swal2-no-backdrop .swal2-container.swal2-center-right{top:50%;right:0;transform:translateY(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom{bottom:0;left:50%;transform:translateX(-50%)}body.swal2-no-backdrop .swal2-container.swal2-bottom-left,body.swal2-no-backdrop .swal2-container.swal2-bottom-start{bottom:0;left:0}body.swal2-no-backdrop .swal2-container.swal2-bottom-end,body.swal2-no-backdrop .swal2-container.swal2-bottom-right{right:0;bottom:0}@media print{body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow-y:scroll!important}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) .swal2-container{position:static!important}}body.swal2-toast-shown .swal2-container{background-color:transparent}body.swal2-toast-shown .swal2-container.swal2-top{top:0;right:auto;bottom:auto;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{top:0;right:0;bottom:auto;left:auto}body.swal2-toast-shown .swal2-container.swal2-top-left,body.swal2-toast-shown .swal2-container.swal2-top-start{top:0;right:auto;bottom:auto;left:0}body.swal2-toast-shown .swal2-container.swal2-center-left,body.swal2-toast-shown .swal2-container.swal2-center-start{top:50%;right:auto;bottom:auto;left:0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{top:50%;right:auto;bottom:auto;left:50%;transform:translate(-50%,-50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{top:50%;right:0;bottom:auto;left:auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-left,body.swal2-toast-shown .swal2-container.swal2-bottom-start{top:auto;right:auto;bottom:0;left:0}body.swal2-toast-shown .swal2-container.swal2-bottom{top:auto;right:auto;bottom:0;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{top:auto;right:0;bottom:0;left:auto}</style><captcha-widgets></captcha-widgets><script src="chrome-extension://ecmeogcbcoalojmkfkmancobmiahaigg/content_script/content_script.js"></script></head>
+<body class="light">
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content=".">
+<meta name="keywords" content="">
+<meta name="author" content="tyc">
+<link rel="apple-touch-icon" href="/dashboard/logo.png">
+<link rel="shortcut icon" href="/dashboard/logo.png">
+
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<title>TYC</title>
+<!-- Google font-->
+<link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/font-awesome.css">
+<!-- ico-font-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/icofont.css">
+<!-- Themify icon-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/themify.css">
+<!-- Flag icon-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/flag-icon.css">
+<!-- Feather icon-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/feather-icon.css">
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/slick.css">
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/slick-theme.css">
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/scrollbar.css">
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/animate.css">
+<!-- Plugins css Ends-->
+<!-- Bootstrap css-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/bootstrap.css">
+<!-- App css-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/style.css">
+<link id="color" rel="stylesheet" href="/dashboard/assets/css/color-1.css" media="screen">
+<!-- Responsive css-->
+<link rel="stylesheet" type="text/css" href="/dashboard/assets/css/responsive.css">
+
+
+<!-- loader starts-->
+
+<!-- loader ends-->
+
+
+
+<!-- tap on top starts-->
+
+<!-- tap on tap ends-->
+<!-- page-wrapper Start-->
+<div class="page-wrapper null compact-sidebar compact-small material-icon" id="pageWrapper">
+    <!-- Page Header Start-->
+    <div class="page-header">
+        <div class="header-wrapper row m-0">
+
+            <div class="header-logo-wrapper col-auto p-0">
+                <div class="logo-wrapper"><a href="index.asp"><img class="img-fluid" src="/dashboard/assets/images/logo/logo.png" alt=""></a></div>
+                <div class="toggle-sidebar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-align-center status_toggle middle sidebar-toggle"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg></div>
+                <div class=" " style="position:absolute; left:40px; top:0; "><span>best1</span></div>
+            </div>
+
+            <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
+                <div class="notification-slider slick-initialized slick-slider slick-vertical"><div class="slick-list draggable" style="height: 39.2px;"><div class="slick-track" style="opacity: 1; height: 40px; transform: translate3d(0px, 0px, 0px);"><div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 525px;"><div><div class="d-flex h-100" style="width: 100%; display: inline-block;">
+                    <h6 class="mb-0 f-w-400"><span class="f-light"><input class="form-control" value="https://tyc.best/dashboard/agree.asp?id=best1 " id="clipboardExample1" type="text" placeholder="type some text to copy / cut" tabindex="0"></span><button class="btn btn-primary btn-clipboard" type="button" data-clipboard-action="copy" data-clipboard-target="#clipboardExample1" onclick="Swal.fire({title:'복사성공', text:'복사되었습니다.',icon:'success' });" tabindex="0"><i class="fa fa-copy"></i>추천코드 복사</button></h6>
+                </div></div></div></div></div></div>
+            </div>
+
+            <div class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 pull-right right-header p-0 ms-auto">
+                <ul class="nav-menus">
+                    <li class="language-nav">
+                        <div class="translate_wrapper">
+                            <div class="current_lang">
+                                <div class="lang"><i class="flag-icon flag-icon-kr"></i><span class="lang-txt">한국어</span></div>
+                            </div>
+                            <div class="more_lang">
+                                <div class="lang selected"><i class="flag-icon flag-icon-kr"></i><a href="/dashboard/"><span class="lang-txt">한국어<span></span></span></a></div>
+                                <div class="lang"><i class="flag-icon flag-icon-jp"></i><a href="/dashboard-jp/"><span class="lang-txt">日本語</span></a></div>
+                                <div class="lang"><i class="flag-icon flag-icon-vn"></i><a href="/dashboard-vn/"><span class="lang-txt">Tiếng Việt</span></a></div>
+                                <div class="lang"><i class="flag-icon flag-icon-us"></i><a href="/dashboard-en/"><span class="lang-txt">English</span></a></div>
+                                <div class="lang"><i class="flag-icon flag-icon-cn"></i><a href="/dashboard-cn/"><span class="lang-txt">中文</span></a></div>
+
+                            </div>
+                        </div>
+                    </li>
+
+
+                    <li class="profile-nav onhover-dropdown pe-0 py-0">
+                        <div class="media profile-media"><img class="b-r-10" src="/dashboard/assets/images/dashboard/profile.png" alt="">
+                            <div class="media-body"><span>best1</span>
+                                <p class="mb-0"> <i class="middle fa fa-angle-down"></i></p>
+                            </div>
+                        </div>
+                        <ul class="profile-dropdown onhover-show-div">
+                            <li><a href="/dashboard/depth/user/user.asp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>계정설정 </span></a></li>
+                            <li><a href="/dashboard/depth/user/edit.asp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>프로필변경</span></a></li>
+                            <li><a href="/include/logout.asp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg><span>로그아웃</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <script class="result-template" type="text/x-handlebars-template">
+                <div class="ProfileCard u-cf">
+                    <div class="ProfileCard-avatar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay m-0"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg></div>
+                    <div class="ProfileCard-details">
+                        <div class="ProfileCard-realName">{{name}}</div>
+                    </div>
+                </div>
+            </script>
+            <script class="empty-template" type="text/x-handlebars-template"><div class="EmptyMessage">Your search turned up 0 results. This most likely means the backend is down, yikes!</div></script>
+        </div>
+    </div>
+    <!-- Page Header Ends                              -->
+
+
+    <link rel="stylesheet" type="text/css" href="/dashboard/assets/css/vendors/range-slider.css">
+    <!-- Page Body Start-->
+    <div class="page-body-wrapper">
+        <!-- Page Sidebar Start-->
+        <div class="sidebar-wrapper" sidebar-layout="stroke-svg">
+            <div>
+                <div class="logo-wrapper"><a href="/dashboard/index.asp"><img class="img-fluid for-light" src="/dashboard/assets/images/logo/logo.png" alt=""><img class="img-fluid for-dark" src="/dashboard/assets/images/logo/logo_dark.png" alt=""></a>
+                    <div class="back-btn"><i class="fa fa-angle-left"></i></div>dsf
+                    <div class="toggle-sidebar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid status_toggle middle sidebar-toggle"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                </div>
+                <div class="logo-icon-wrapper"><a href="/dashboard/index.asp"><img class="img-fluid" src="/dashboard/logo.png" alt=""></a></div>
+                <nav class="sidebar-main">
+                    <div class="left-arrow disabled" id="left-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></div>
+                    <div id="sidebar-menu">
+                        <ul class="sidebar-links" id="simple-bar" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden;"><div class="simplebar-content" style="padding: 0px;">
+
+
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title"><div style="text-align:center">개인정보</div>
+                                <svg class="stroke-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#stroke-user"></use>
+                                </svg>
+                                <svg class="fill-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#fill-user"></use>
+                                </svg><span>개인정보</span></a>
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;">개인정보</h6>
+                                    </li>
+                                    <li><a href="/dashboard/depth/user/user.asp">회원정보</a></li>
+                                    <li><a href="/dashboard/depth/user/edit.asp">개인정보수정</a></li>
+                                    <li><a href="/dashboard/depth/user/password.asp">패스워드수정</a></li>
+                                    <li><a href="/dashboard/depth/user/password2.asp">2차패스워드 수정</a></li>
+
+                                </ul>
+                            </li>
+
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav"><div style="text-align:center">조직도</div>
+                                <svg class="stroke-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#stroke-learning"></use>
+                                </svg>
+                                <svg class="fill-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#fill-project"></use>
+                                </svg><span>조직도</span></a>
+
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;"> 조직도</h6>
+                                    </li>
+                                    <li><a onclick="mview2()">조직도</a></li>
+                                    <li><a href="/dashboard/depth/package/package_volume.asp">그룹실적</a></li>
+
+
+                                </ul>
+
+                            </li>
+
+                            <li class="sidebar-list">
+
+                                <a class="sidebar-link sidebar-title link-nav"><div style="text-align:center">구매신청</div>
+                                    <svg class="stroke-icon">
+                                        <use href="/dashboard/assets/svg/icon-sprite.svg#new-order"></use>
+                                    </svg>
+                                    <svg class="fill-icon">
+                                        <use href="/dashboard/assets/svg/icon-sprite.svg#fill-widget"></use>
+                                    </svg><span>구매신청</span>
+
+                                </a>
+
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;">구매신청</h6>
+                                    </li>
+                                    <li><a href="/dashboard/depth/package/package.asp">구매신청</a></li>
+                                    <li><a href="/dashboard/depth/package/package_list.asp">구매신청내역</a></li>
+
+                                </ul>
+                            </li>
+
+                            <li class="sidebar-list" style="width:1px !important; position:absolute; top:-9999px; left:89999px; height:1px !important overflow:hidden !important">
+
+
+                                <a class="sidebar-link sidebar-title link-nav"><div style="text-align:center">출금신청</div>
+                                    <svg class="stroke-icon">
+                                        <use href="/dashboard/assets/svg/icon-sprite.svg#new-order"></use>
+                                    </svg>
+                                    <svg class="fill-icon">
+                                        <use href="/dashboard/assets/svg/icon-sprite.svg#fill-widget"></use>
+                                    </svg>
+                                    <span>출금신청</span>
+
+                                </a>
+
+
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;">리워드 출금신청</h6>
+                                    </li>
+
+                                    <li><a href="/dashboard/depth/wallet/withdraw.asp">리워드 출금신청</a></li>
+                                    <li><a href="/dashboard/depth/wallet/withdraw_stock.asp">주식구매</a></li>
+                                    <li><a href="/dashboard/depth/wallet/withdraw_list.asp">리워드 출금신청 내역</a></li>
+                                    <li><a href="/dashboard/depth/wallet/transfer.asp">포인트 전송신청</a></li>
+                                    <li><a href="/dashboard/depth/wallet/transfer_list.asp">포인트 전송신청 내역</a></li>
+
+                                </ul>
+
+                            </li>
+
+
+
+                            <li class="sidebar-list">
+
+
+                                <a class="sidebar-link sidebar-title link-nav"><div style="text-align:center">출금신청</div>
+                                    <svg class="stroke-icon">
+                                        <use href="/dashboard/assets/svg/icon-sprite.svg#new-order"></use>
+                                    </svg>
+                                    <svg class="fill-icon">
+                                        <use href="/dashboard/assets/svg/icon-sprite.svg#fill-widget"></use>
+                                    </svg>
+                                    <span>출금신청</span>
+
+                                </a>
+
+
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;">리워드 출금신청</h6>
+                                    </li>
+
+                                    <li><a href="/dashboard/depth/wallet/withdraw.asp">리워드 출금신청</a></li>
+                                    <li><a href="/dashboard/depth/wallet/withdraw_stock.asp">주식구매</a></li>
+                                    <li><a href="/dashboard/depth/wallet/withdraw_list.asp">리워드 출금신청 내역</a></li>
+                                    <li><a href="/dashboard/depth/wallet/transfer.asp">포인트 전송신청</a></li>
+                                    <li><a href="/dashboard/depth/wallet/transfer_list.asp">포인트 전송신청 내역</a></li>
+
+                                </ul>
+
+                            </li>
+
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav"><div style="text-align:center">리워드</div>
+                                <svg class="stroke-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#stroke-task"></use>
+                                </svg>
+                                <svg class="fill-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#fill-layout"></use>
+                                </svg><span>리워드 사용내역</span></a>
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;">리워드 사용내역</h6>
+                                    </li>
+                                    <li><a href="/dashboard/depth/bonus/deposit_list.asp">리워드 사용내역</a></li>
+
+
+                                </ul>
+                            </li>
+
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav"><div style="text-align:center">리워드발생</div>
+                                <svg class="stroke-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#doller-return"></use>
+                                </svg>
+                                <svg class="fill-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#fill-layout"></use>
+                                </svg><span>리워드 발생 내역</span></a>
+                                <ul class="sidebar-submenu" style="display: none;">
+                                    <li class="nav-item">
+                                        <h6 class="py-2 px-3" style="font-weight: 900;"> 리워드 발생 내역</h6>
+                                    </li>
+                                    <li><a href="/dashboard/depth/bonus/bonus_list.asp">리워드 발생 내역</a></li>
+                                    <li><a href="/dashboard/depth/bonus/bonus_daylist.asp">마이닝리워드 상세 내역</a></li>
+
+                                </ul>
+                            </li>
+
+
+
+
+
+
+
+
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="/dashboard/depth/bbs/bbs.asp"><div style="text-align:center">1:1문의</div>
+                                <svg class="stroke-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#stroke-editors"></use>
+                                </svg>
+                                <svg class="fill-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#fill-knowledgebase"></use>
+                                </svg><span>문의하기</span></a></li>
+
+
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="/include/logout.asp"><div style="text-align:center">로그아웃</div>
+                                <svg class="stroke-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#back-arrow"></use>
+                                </svg>
+                                <svg class="fill-icon">
+                                    <use href="/dashboard/assets/svg/icon-sprite.svg#fill-editors"></use>
+                                </svg><span>로그아웃</span></a>
+
+                            </li>
+
+
+
+                        </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 621px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: hidden;"><div class="simplebar-scrollbar" style="height: 0px; display: none;"></div></div></ul>
+                    </div>
+                    <div class="right-arrow" id="right-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </nav>
+            </div>
+        </div>
+        <script type="text/javascript">
+            <!--
+            function mview2(){
+                noticeWindow = window.open('/dashboard/depth/mview2.asp','Organization.','scrollbars=yes, width=1200, height=1000, resizable=yes');
+                noticeWindow.opener = self;
+            }
+            function mview1(){
+                noticeWindow = window.open('/dashboard/depth/mview1.asp','Organization.','scrollbars=yes, width=1200, height=1000, resizable=yes');
+                noticeWindow.opener = self;
+            }
+
+            //-->
+        </script>
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-6">
+
+                        </div>
+                        <div class="col-6">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+
+                <div class="row widget-grid">
+                    <!--     <div class="col-xxl-4 col-sm-6 box-col-6"> -->
+                    <!--       <div class="card profile-box"> -->
+                    <!--         <div class="card-body"> -->
+                    <!--           <div class="media media-wrapper justify-content-between"> -->
+                    <!--             <div class="media-body"> -->
+                    <!--               <div class="greeting-user"> -->
+                    <!--                 <h4 class="f-w-600">TYC</h4> -->
+                    <!--                 <p>세상을 행복하게 만드는 친구들</p> -->
+                    <!--                 <div class="whatsnew-btn"><a class="btn btn-outline-white">Whats New !</a></div> -->
+                    <!--               </div> -->
+                    <!--             </div> -->
+                    <!--             <div> -->
+                    <!--               <div class="clockbox"> -->
+                    <!--                 <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"> -->
+                    <!--                   <g id="face"> -->
+                    <!--                     <circle class="circle" cx="300" cy="300" r="253.9"></circle> -->
+                    <!--                     <path class="hour-marks" d="M300.5 94V61M506 300.5h32M300.5 506v33M94 300.5H60M411.3 107.8l7.9-13.8M493 190.2l13-7.4M492.1 411.4l16.5 9.5M411 492.3l8.9 15.3M189 492.3l-9.2 15.9M107.7 411L93 419.5M107.5 189.3l-17.1-9.9M188.1 108.2l-9-15.6"></path> -->
+                    <!--                     <circle class="mid-circle" cx="300" cy="300" r="16.2"></circle> -->
+                    <!--                   </g> -->
+                    <!--                   <g id="hour"> -->
+                    <!--                     <path class="hour-hand" d="M300.5 298V142"></path> -->
+                    <!--                     <circle class="sizing-box" cx="300" cy="300" r="253.9"></circle> -->
+                    <!--                   </g> -->
+                    <!--                   <g id="minute"> -->
+                    <!--                     <path class="minute-hand" d="M300.5 298V67">   </path> -->
+                    <!--                     <circle class="sizing-box" cx="300" cy="300" r="253.9"></circle> -->
+                    <!--                   </g> -->
+                    <!--                   <g id="second"> -->
+                    <!--                     <path class="second-hand" d="M300.5 350V55"></path> -->
+                    <!--                     <circle class="sizing-box" cx="300" cy="300" r="253.9">   </circle> -->
+                    <!--                   </g> -->
+                    <!--                 </svg> -->
+                    <!--               </div> -->
+                    <!--               <div class="badge f-10 p-0" id="txt"></div> -->
+                    <!--             </div> -->
+                    <!--           </div> -->
+                    <!--           <div class="cartoon text-end "><img class="img-fluid " style="max-width:50% ;margin-top:50px;" src="/images/stkbg.png" alt="vector women with leptop"></div> -->
+                    <!--         </div> -->
+                    <!--       </div> -->
+                    <!--     </div> -->
+
+                    <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6" style="display:none">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card widget-1">
+                                    <a href="/dashboard/depth/package/package.asp">
+                                        <div class="card-body">
+
+                                            <div class="widget-content">
+                                                <div class="widget-round secondary">
+                                                    <div class="bg-round">
+                                                        <svg class="svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#orders"> </use>
+                                                        </svg>
+                                                        <svg class="half-circle svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h4>0</h4><span class="f-light">구매 DSP</span>
+                                                </div>
+                                            </div>
+                                            <div class="font-secondary f-w-500"></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xl-12" style="display:none">
+                                    <div class="card widget-1">
+                                        <a href="/dashboard/depth/wallet/withdraw.asp">
+                                            <div class="card-body">
+                                                <div class="widget-content">
+                                                    <div class="widget-round primary">
+                                                        <div class="bg-round">
+                                                            <svg class="svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#tag"> </use>
+                                                            </svg>
+                                                            <svg class="half-circle svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h4>0</h4><span class="f-light">출금가능 DSP</span>
+                                                    </div>
+                                                </div>
+                                                <div class="font-primary f-w-500"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6" style="display:none">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card widget-1">
+                                    <a href="/dashboard/depth/bonus/bonus_daylist.asp">
+                                        <div class="card-body">
+                                            <div class="widget-content">
+                                                <div class="widget-round warning">
+                                                    <div class="bg-round">
+                                                        <svg class="svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#return-box"> </use>
+                                                        </svg>
+                                                        <svg class="half-circle svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h4>0</h4><span class="f-light">잔여리워드 DSP</span>
+                                                </div>
+                                            </div>
+                                            <div class="font-warning f-w-500"></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xl-12" style="display:none">
+                                    <div class="card widget-1">
+                                        <a href="/dashboard/depth/wallet/withdraw_list.asp">
+                                            <div class="card-body">
+                                                <div class="widget-content">
+                                                    <div class="widget-round success">
+                                                        <div class="bg-round">
+                                                            <svg class="svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#doller-return"> </use>
+                                                            </svg>
+                                                            <svg class="half-circle svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h4>0</h4><span class="f-light">출금완료 DSP</span>
+                                                    </div>
+                                                </div>
+                                                <div class="font-success f-w-500"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6" style="display:none">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card widget-1">
+                                    <a href="/dashboard/depth/bonus/deposit_list.asp">
+                                        <div class="card-body">
+                                            <div class="widget-content">
+                                                <div class="widget-round warning">
+                                                    <div class="bg-round">
+                                                        <svg class="svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#profit"> </use>
+                                                        </svg>
+                                                        <svg class="half-circle svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h4>0</h4><span class="f-light">총리워드 DSP</span>
+                                                </div>
+                                            </div>
+                                            <div class="font-warning f-w-500"></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xl-12" style="display:none">
+                                    <div class="card widget-1">
+                                        <a href="/dashboard/depth/bonus/bonus_list.asp">
+                                            <div class="card-body">
+                                                <div class="widget-content">
+                                                    <div class="widget-round success">
+                                                        <div class="bg-round">
+                                                            <svg class="svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#sale"> </use>
+                                                            </svg>
+                                                            <svg class="half-circle svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h4>0</h4><span class="f-light">마이닝 리워드</span>
+                                                    </div>
+                                                </div>
+                                                <div class="font-success f-w-500"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xxl-auto col-xl-3 col-sm-6 box-col-6" style="display:none">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card widget-1">
+                                    <a href="/dashboard/depth/bonus/bonus_list.asp">
+                                        <div class="card-body">
+                                            <div class="widget-content">
+                                                <div class="widget-round warning">
+                                                    <div class="bg-round">
+                                                        <svg class="svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#profit"> </use>
+                                                        </svg>
+                                                        <svg class="half-circle svg-fill">
+                                                            <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h4 class="mb-1">0</h4><span class="f-light">매니저 리워드</span>
+                                                </div>
+                                            </div>
+                                            <div class="font-warning f-w-500"></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xl-12" style="display:none">
+                                    <div class="card widget-1">
+                                        <a href="/dashboard/depth/bonus/bonus_list.asp">
+                                            <div class="card-body">
+                                                <div class="widget-content">
+                                                    <div class="widget-round success">
+                                                        <div class="bg-round">
+                                                            <svg class="svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#sale"> </use>
+                                                            </svg>
+                                                            <svg class="half-circle svg-fill">
+                                                                <use href="/dashboard/assets/svg/icon-sprite.svg#halfcircle"></use>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="mb-1">0</h4><span class="f-light">스페셜 리워드</span>
+                                                    </div>
+                                                </div>
+                                                <div class="font-success f-w-500"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <!-- 	<div class="col-xxl-auto col-xl-12 col-sm-6 box-col-6"> -->
+                    <!--       <div class="row"> -->
+                    <!--         <div class="col-xxl-12 col-xl-6 box-col-12"> -->
+                    <!--           <div class="card widget-1 widget-with-chart"> -->
+                    <!--             <div class="card-body"> -->
+                    <!--               <div> -->
+                    <!--                 <h4 class="mb-1">0</h4><span class="f-light">매니저 리워드</span> -->
+                    <!--               </div> -->
+                    <!--               <div class="order-chart"> -->
+                    <!--                 <div id="orderchart2"></div> -->
+                    <!--               </div> -->
+                    <!--             </div> -->
+                    <!--           </div> -->
+                    <!--         </div> -->
+                    <!--         <div class="col-xxl-12 col-xl-6 box-col-12"> -->
+                    <!--           <div class="card widget-1 widget-with-chart"> -->
+                    <!--             <div class="card-body"> -->
+                    <!--               <div> -->
+                    <!--                 <h4 class="mb-1">0</h4><span class="f-light">스페셜 리워드</span> -->
+                    <!--               </div> -->
+                    <!--               <div class="profit-chart"> -->
+                    <!--                 <div id="profitchart2"></div> -->
+                    <!--               </div> -->
+                    <!--             </div> -->
+                    <!--           </div> -->
+                    <!--         </div> -->
+                    <!--       </div> -->
+                    <!--  -->
+                    <!--  <div class="font-success f-w-500"><i class="icon-arrow-up icon-rotate me-1"></i><span>+70%</span></div>-->
+                    <!--     </div> -->
+
+                </div>
+
+
+
+            </div>
+
+            <div class="container-fluid">
+                <div class="email-wrap bookmark-wrap">
+                    <div class="row">
+                        <div class="col-xl-3 box-col-6">
+                            <div class="md-sidebar"><a class="btn btn-primary md-sidebar-toggle" href="javascript:void(0)">메뉴</a>
+                                <div class="md-sidebar-aside job-left-aside custom-scrollbar">
+                                    <div class="email-left-aside">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="email-app-sidebar left-bookmark">
+                                                    <ul class="nav main-menu contact-options" role="tablist">
+                                                        <li class="nav-item">
+                                                            <button class="button-primary btn-block btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users me-2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 마이닝리워드 상세 내역</button>
+                                                        </li>
+                                                        <li class="nav-item"><span class="main-title"> 리워드 발생 내역</span></li>
+
+                                                        <li><a href="bonus_list.asp"><span class="title">리워드 발생 내역</span></a></li>
+                                                        <li><a href="bonus_daylist.asp"><span class="title">마이닝리워드 상세 내역</span></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-9 col-md-12 box-col-12">
+                            <div class=" checkout email-verify">
+                                <div class="card-body p-0">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>마이닝리워드 상세 내역 </h5>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>마이닝리워드 상세 내역</h5>
+                                </div>
+
+
+                                <div class="card-body activity-card">
+                                    <div class="flip-scroll">
+                                        <table class="table table-bordered  nowrap mt-4  basic_table mTable">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">마감일자</th>
+                                                <th scope="col">매출일자</th>
+                                                <th scope="col">매출금액</th>
+                                                <th scope="col">극점</th>
+                                                <th scope="col">누적지급액</th>
+                                                <th scope="col">지급률(%)</th>
+                                                <th scope="col">당일데일리</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            <tr>
+                                                <td colspan="7" height="100" align="center" valign="middle" style="vertical-align:middle!important;">No articles..</td>
+                                            </tr>
+
+                                            </tbody>
+
+
+
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+    </div>
+    <!-- footer start-->
+
+    <footer class="footer">
+        <div class="container-fluid">
+
+            <div class="bottom-menu" id="bottom-menu">
+                <a href="/include/logout.asp" class="active">
+                    <i class="icon-power-off"></i>
+                    로그아웃
+                </a>
+                <a href="/dashboard/depth/package/package.asp">
+                    <i class="icon-package"></i>
+                    구매신청
+                </a>
+
+                <button class="btn btn-primary btn-clipboard" type="button" data-clipboard-action="copy" data-clipboard-text="https://tyc.best/dashboard/agree.asp?id=best1" onclick="Swal.fire({title:'성공', text:'복사성공',icon:'success' });"><i class="fa fa-copy">추천코드복사</i></button>
+                <a href="/dashboard/depth/wallet/withdraw.asp">
+                    <i class="icon-support"></i>
+                    출금
+                </a>
+                <a href="/dashboard/depth/bonus/bonus_list.asp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    발생내역
+                </a>
+            </div>
+
+
+            <style>
+
+
+                .bottom-menu {
+
+                    width:100%;
+                    position:fixed;
+                    bottom:0;
+                    left:0;
+                    background-color:#FFF;
+                    display:none;
+                    align-items:center;
+                    justify-content:space-between;
+                    padding-top:5px;
+                    padding-bottom:5px;
+                }
+                .bottom-menu a {
+                    display:flex;
+                    flex-direction:column;
+                    align-items:center;
+                    flex:1;
+                    padding:5px;
+                    color:#949494;
+                    font-weight:600;
+                    font-size:11px;
+                    text-decoration:none;
+                    letter-spacing:-0.5px;
+                    transition:all .3s;
+                }
+                .bottom-menu a i{
+                    font-size:14px;
+                    margin-bottom:5px;
+                }
+                .bottom-menu a.sat {
+                    background-color:rgba(246,197,197,0.4);
+                    color:#fff;
+                    border-radius:100%;
+                    width:70px;
+                    height:70px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    position:absolute;
+                    left:50%;
+                    transform:translateX(-50%);
+                    top:-20px;
+                    border:6px solid #fff;
+                }
+                .bottom-menu a.sat:hover {
+                    border-color:#ff3f56;
+                    color:#fff;
+                }
+                .bottom-menu a.active, .bottom-menu a:hover {
+                    color:#ff3f56;
+                }
+
+                .sat img {max-width:60px;}
+                .bottom-menu a:last-child{
+                    margin-right:0;
+                }
+                span.bosluk {
+                    flex:1;
+                }
+
+                @media (max-width:768px){
+                    .page-wrapper {
+                        position: relative;
+                        margin-bottom: 50px;
+                    }
+
+                    .bottom-menu {
+                        z-index:9901!important;
+
+                        display:flex;
+
+                    }
+
+            </style>
+
+
+            <div class="row">
+                <div class="col-md-12 footer-copyright text-center d-none d-md-block">
+                    <p class="mb-0">Copyright 2024 © TYC </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- latest jquery-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<!-- Bootstrap js-->
+<script src="/dashboard/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- feather icon js-->
+<script src="/dashboard/assets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/dashboard/assets/js/icons/feather-icon/feather-icon.js"></script>
+<!-- scrollbar js-->
+<script src="/dashboard/assets/js/scrollbar/simplebar.js"></script>
+<script src="/dashboard/assets/js/scrollbar/custom.js"></script>
+<!-- Sidebar jquery-->
+<script src="/dashboard/assets/js/config.js"></script>
+<!-- Plugins JS start-->
+<script src="/dashboard/assets/js/sidebar-menu.js"></script><div class="bg-overlay1"></div>
+<script src="/dashboard/assets/js/sidebar-pin.js"></script>
+
+<script src="/dashboard/assets/js/slick/slick.min.js"></script>
+<script src="/dashboard/assets/js/slick/slick.js"></script>
+<script src="/dashboard/assets/js/header-slick.js"></script>
+<script src="/dashboard/assets/js/chart/apex-chart/apex-chart.js"></script>
+<script src="/dashboard/assets/js/chart/apex-chart/stock-prices.js"></script>
+<script src="/dashboard/assets/js/chart/apex-chart/moment.min.js"></script>
+<script src="/dashboard/assets/js/notify/bootstrap-notify.min.js"></script>
+
+<script src="/dashboard/assets/js/notify/index.js"></script>
+<script src="/dashboard/assets/js/typeahead/handlebars.js"></script>
+<script src="/dashboard/assets/js/typeahead/typeahead.bundle.js"></script>
+<script src="/dashboard/assets/js/typeahead/typeahead.custom.js"></script>
+<script src="/dashboard/assets/js/typeahead-search/handlebars.js"></script>
+<script src="/dashboard/assets/js/typeahead-search/typeahead-custom.js"></script>
+<script src="/dashboard/assets/js/height-equal.js"></script>
+<script src="/dashboard/assets/js/animation/wow/wow.min.js"></script>
+<script src="/dashboard/assets/js/clipboard/clipboard.min.js"></script>
+<script src="/dashboard/assets/js/clipboard/clipboard-script.js"></script>
+<!-- Plugins JS Ends-->
+<!-- Theme js-->
+<script src="/dashboard/assets/js/script.js"></script>
+
+
+
+<script>
+    (function () {
+        // order chart
+
+
+        var options2 = {
+            series: [
+                {
+                    name: "Daily",
+                    data: [
+                        2.15, 3, 1.5, 2, 2.4, 3, 2.4, 2.8, 1.5, 1.7, 3, 2.5, 3, 2, 2.15, 3,
+                        1.1,
+                    ],
+                },
+                {
+                    name: "Weekly",
+                    data: [
+                        -2.15, -3, -1.5, -2, -2.4, -3, -2.4, -2.8, -1.5, -1.7, -3, -2.5, -3,
+                        -2, -2.15, -3, -1.1,
+                    ],
+                },
+                {
+                    name: "Monthly",
+                    data: [
+                        -2.25, -2.35, -2.45, -2.55, -2.65, -2.75, -2.85, -2.95, -3.0, -3.1,
+                        -3.2, -3.25, -3.1, -3.0, -2.95, -2.85, -2.75,
+                    ],
+                },
+                {
+                    name: "Yearly",
+                    data: [
+                        2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.0, 3.1, 3.2, 3.25,
+                        3.1, 3.0, 2.95, 2.85, 2.75,
+                    ],
+                },
+            ],
+            chart: {
+                type: "bar",
+                width: 180,
+                height: 120,
+                stacked: true,
+                toolbar: {
+                    show: false,
+                },
+            },
+            plotOptions: {
+                bar: {
+                    vertical: true,
+                    columnWidth: "40%",
+                    barHeight: "80%",
+                    startingShape: "rounded",
+                    endingShape: "rounded",
+                },
+            },
+            colors: [
+                CubaAdminConfig.primary,
+                CubaAdminConfig.primary,
+                "#F2F3F7",
+                "#F2F3F7",
+            ],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                width: 0,
+            },
+            legend: {
+                show: false,
+            },
+            grid: {
+                xaxis: {
+                    offsetX: -2,
+                    lines: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    lines: {
+                        show: false,
+                    },
+                },
+            },
+            yaxis: {
+                min: -5,
+                max: 5,
+                show: false,
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            tooltip: {
+                shared: false,
+                x: {
+                    show: false,
+                },
+                y: {
+                    show: false,
+                },
+                z: {
+                    show: false,
+                },
+            },
+            xaxis: {
+                categories: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "July",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                ],
+                offsetX: 0,
+                offsetY: 0,
+                labels: {
+                    offsetX: 0,
+                    offsetY: 0,
+                    show: false,
+                },
+                axisBorder: {
+                    offsetX: 0,
+                    offsetY: 0,
+                    show: false,
+                },
+                axisTicks: {
+                    offsetX: 0,
+                    offsetY: 0,
+                    show: false,
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 1760,
+                    options: {
+                        chart: {
+                            width: 160,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1601,
+                    options: {
+                        chart: {
+                            height: 110,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1560,
+                    options: {
+                        chart: {
+                            width: 140,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1460,
+                    options: {
+                        chart: {
+                            width: 120,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1400,
+                    options: {
+                        chart: {
+                            width: 290,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1110,
+                    options: {
+                        chart: {
+                            width: 200,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 700,
+                    options: {
+                        chart: {
+                            width: 150,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 576,
+                    options: {
+                        chart: {
+                            width: 220,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 420,
+                    options: {
+                        chart: {
+                            width: 150,
+                        },
+                    },
+                },
+            ],
+        };
+
+        var chart2 = new ApexCharts(document.querySelector("#orderchart"), options2);
+
+        chart2.render();
+
+        // profit chart
+        var options3 = {
+            series: [
+                {
+                    name: "Rewards",
+                    data: [210, 180, 650, 200, 600, 100, 800, 300, 500],
+                },
+            ],
+            chart: {
+                width: 200,
+                height: 150,
+                type: "line",
+                toolbar: {
+                    show: false,
+                },
+                dropShadow: {
+                    enabled: true,
+                    enabledOnSeries: undefined,
+                    top: 5,
+                    left: 0,
+                    blur: 3,
+                    color: "#16C7F9",
+                    opacity: 0.3,
+                },
+                zoom: {
+                    enabled: false,
+                },
+            },
+            colors: ["#16C7F9"],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                width: 2,
+                curve: "smooth",
+            },
+            grid: {
+                show: false,
+            },
+            tooltip: {
+                x: {
+                    show: false,
+                },
+                y: {
+                    show: false,
+                },
+                z: {
+                    show: false,
+                },
+                marker: {
+                    show: false,
+                },
+            },
+            xaxis: {
+                categories: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                ],
+                labels: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+                tooltip: {
+                    enabled: false,
+                },
+            },
+            yaxis: {
+                labels: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 1780,
+                    options: {
+                        chart: {
+                            width: 180,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1680,
+                    options: {
+                        chart: {
+                            width: 160,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1601,
+                    options: {
+                        chart: {
+                            height: 110,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1560,
+                    options: {
+                        chart: {
+                            width: 140,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1460,
+                    options: {
+                        chart: {
+                            width: 120,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1400,
+                    options: {
+                        chart: {
+                            width: 290,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1110,
+                    options: {
+                        chart: {
+                            width: 200,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 700,
+                    options: {
+                        chart: {
+                            width: 150,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 576,
+                    options: {
+                        chart: {
+                            width: 220,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 420,
+                    options: {
+                        chart: {
+                            width: 150,
+                        },
+                    },
+                },
+            ],
+        };
+
+        var chart3 = new ApexCharts(document.querySelector("#profitchart"), options3);
+        chart3.render();
+
+        // currently sale
+        var options = {
+            series: [
+                {
+                    name: "마이닝리워드",
+                    data: [
+                        ,
+                    ],
+                },
+                {
+                    name: "매니저리워드",
+                    data: [
+                        ,
+                    ],
+                },
+                {
+                    name: "스페셜리워드",
+                    data: [
+                        ,
+                    ],
+                },
+
+
+            ],
+            chart: {
+                type: "bar",
+                height: 300,
+                stacked: true,
+                toolbar: {
+                    show: false,
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 8,
+                    left: 0,
+                    blur: 10,
+                    color: "#7064F5",
+                    opacity: 0.1,
+                },
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: "25px",
+                    borderRadius: 0,
+                },
+            },
+            grid: {
+                show: true,
+                borderColor: "var(--chart-border)",
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                width: 2,
+                dashArray: 0,
+                lineCap: "butt",
+                colors: "#fff",
+            },
+            fill: {
+                opacity: 1,
+            },
+            legend: {
+                show: false,
+            },
+            states: {
+                hover: {
+                    filter: {
+                        type: "darken",
+                        value: 1,
+                    },
+                },
+            },
+            colors: [CubaAdminConfig.primary, "#0070C0"],
+            yaxis: {
+                tickAmount: 3,
+                labels: {
+                    show: true,
+                    style: {
+                        fontFamily: "Rubik, sans-serif",
+                    },
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            xaxis: {
+                categories: [],
+                labels: {
+                    style: {
+                        fontFamily: "Rubik, sans-serif",
+                    },
+                },
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            states: {
+                hover: {
+                    filter: {
+                        type: "darken",
+                        value: 1,
+                    },
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 1661,
+                    options: {
+                        chart: {
+                            height: 290,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 767,
+                    options: {
+                        plotOptions: {
+                            bar: {
+                                columnWidth: "35px",
+                            },
+                        },
+                        yaxis: {
+                            labels: {
+                                show: false,
+                            },
+                        },
+                    },
+                },
+                {
+                    breakpoint: 481,
+                    options: {
+                        chart: {
+                            height: 200,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 420,
+                    options: {
+                        chart: {
+                            height: 170,
+                        },
+                        plotOptions: {
+                            bar: {
+                                columnWidth: "40px",
+                            },
+                        },
+                    },
+                },
+            ],
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#chart-currently"),
+            options
+        );
+        chart.render();
+
+        // recent chart
+        var rvalue=3.21;
+        var recentoptions = {
+            series: [0],
+
+            chart: {
+                height: 290,
+                type: "radialBar",
+                toolbar: {
+                    show: false,
+                },
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        margin: 0,
+                        size: "60%",
+                        background: "var(--recent-chart-bg)",
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: "front",
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.05,
+                        },
+                    },
+                    track: {
+                        background: "#F4F4F4",
+                        strokeWidth: "67%",
+                        margin: 0,
+                        dropShadow: {
+                            enabled: true,
+                            top: 0,
+                            left: 0,
+                            blur: 10,
+                            color: "#ddd",
+                            opacity: 1,
+                        },
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: 30,
+                            show: true,
+                            color: "#888",
+                            fontSize: "17px",
+                            fontWeight: "500",
+                            fontFamily: "Rubik, sans-serif",
+                        },
+                        value: {
+                            formatter: function (val) {
+                                return parseInt(val);
+                            },
+                            offsetY: -8,
+                            color: "#111",
+                            fontSize: "36px",
+                            show: true,
+                        },
+                    },
+                },
+            },
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shade: "dark",
+                    type: "horizontal",
+                    shadeIntensity: 0.5,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    colorStops: [
+                        {
+                            offset: 0,
+                            color: "#7366FF",
+                            opacity: 1,
+                        },
+                        {
+                            offset: 20,
+                            color: "#3EA4F1",
+                            opacity: 1,
+                        },
+                        {
+                            offset: 100,
+                            color: "#FFFFFF",
+                            opacity: 1,
+                        },
+                    ],
+                },
+            },
+            stroke: {
+                lineCap: "round",
+            },
+            labels: ["%"],
+            responsive: [
+                {
+                    breakpoint: 1840,
+                    options: {
+                        chart: {
+                            height: 260,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1700,
+                    options: {
+                        chart: {
+                            height: 250,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1660,
+                    options: {
+                        chart: {
+                            height: 230,
+                            dataLabels: {
+                                name: {
+                                    fontSize: "15px",
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1561,
+                    options: {
+                        chart: {
+                            height: 275,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1400,
+                    options: {
+                        chart: {
+                            height: 360,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1361,
+                    options: {
+                        chart: {
+                            height: 300,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1200,
+                    options: {
+                        chart: {
+                            height: 230,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1007,
+                    options: {
+                        chart: {
+                            height: 240,
+                        },
+                    },
+                },
+                {
+                    breakpoint: 600,
+                    options: {
+                        chart: {
+                            height: 230,
+                        },
+                    },
+                },
+            ],
+        };
+
+        var recentchart = new ApexCharts(
+            document.querySelector("#recentchart"),
+            recentoptions
+        );
+        recentchart.render();
+
+        // schedule chart
+        var scheduleoptions = {
+            series: [
+                {
+                    data: [
+                        {
+                            x: "Analysis",
+                            y: [
+                                new Date("2022-01-01").getTime(),
+                                new Date("2022-02-30").getTime(),
+                            ],
+                            fillColor: "var(--theme-deafult)",
+                        },
+                        {
+                            x: "Design",
+                            y: [
+                                new Date("2022-02-20").getTime(),
+                                new Date("2022-04-08").getTime(),
+                            ],
+                            fillColor: "#54BA4A",
+                        },
+                        {
+                            x: "Coding",
+                            y: [
+                                new Date("2022-01-25").getTime(),
+                                new Date("2022-03-20").getTime(),
+                            ],
+                            fillColor: "#FFAA05",
+                        },
+                        {
+                            x: "Testing",
+                            y: [
+                                new Date("2022-01-01").getTime(),
+                                new Date("2022-03-12").getTime(),
+                            ],
+                            fillColor: "#46A7FB",
+                        },
+                    ],
+                },
+            ],
+            chart: {
+                height: 355,
+                type: "rangeBar",
+                toolbar: {
+                    show: false,
+                },
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    distributed: true,
+                    barHeight: "40%",
+                    dataLabels: {
+                        hideOverflowingLabels: false,
+                    },
+                },
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val, opts) {
+                    var label = opts.w.globals.labels[opts.dataPointIndex];
+                    var a = moment(val[0]);
+                    var b = moment(val[1]);
+                    var diff = b.diff(a, "days");
+                    return label;
+                },
+                textAnchor: "end",
+                offsetX: 0,
+                offsetY: 0,
+                background: {
+                    enabled: true,
+                    foreColor: "#52526C",
+                    padding: 15,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: "var(--white)",
+                    opacity: 0.9,
+                },
+            },
+            xaxis: {
+                type: "datetime",
+                position: "top",
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+            },
+            grid: {
+                row: {
+                    colors: ["var(--light-background)", "var(--white)"],
+                    opacity: 1,
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 576,
+                    options: {
+                        yaxis: {
+                            labels: {
+                                show: false,
+                            },
+                        },
+                        grid: {
+                            padding: {
+                                left: -10,
+                            },
+                        },
+                    },
+                },
+            ],
+        };
+
+        var schedulechart = new ApexCharts(
+            document.querySelector("#schedulechart"),
+            scheduleoptions
+        );
+        schedulechart.render();
+
+        // growth chart
+        var growthoptions = {
+            series: [
+                {
+                    name: "Growth",
+                    data: [10, 5, 15, 0, 15, 12, 29, 29, 29, 12, 15, 5],
+                },
+            ],
+            chart: {
+                height: 200,
+                type: "line",
+                toolbar: {
+                    show: false,
+                },
+                dropShadow: {
+                    enabled: true,
+                    enabledOnSeries: undefined,
+                    top: 5,
+                    left: 0,
+                    blur: 4,
+                    color: "#7366ff",
+                    opacity: 0.22,
+                },
+            },
+            grid: {
+                yaxis: {
+                    lines: {
+                        show: false,
+                    },
+                },
+            },
+            colors: ["#5527FF"],
+            stroke: {
+                width: 3,
+                curve: "smooth",
+            },
+            xaxis: {
+                type: "category",
+                categories: [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                    "Jan",
+                ],
+                tickAmount: 10,
+                labels: {
+                    style: {
+                        fontFamily: "Rubik, sans-serif",
+                    },
+                },
+                axisTicks: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false,
+                },
+                tooltip: {
+                    enabled: false,
+                },
+            },
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shade: "dark",
+                    gradientToColors: ["#5527FF"],
+                    shadeIntensity: 1,
+                    type: "horizontal",
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    colorStops: [
+                        {
+                            offset: 0,
+                            color: "#5527FF",
+                            opacity: 1,
+                        },
+                        {
+                            offset: 100,
+                            color: "#E069AE",
+                            opacity: 1,
+                        },
+                    ],
+                    // stops: [0, 100, 100, 100]
+                },
+            },
+            yaxis: {
+                min: -10,
+                max: 40,
+                labels: {
+                    show: false,
+                },
+            },
+        };
+
+        var growthchart = new ApexCharts(
+            document.querySelector("#growthchart"),
+            growthoptions
+        );
+        growthchart.render();
+    })();
+
+    // time
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        // var s = today.getSeconds();
+        var ampm = h >= 12 ? "PM" : "AM";
+        h = h % 12;
+        h = h ? h : 12;
+        m = checkTime(m);
+        // s = checkTime(s);
+        // document.getElementById("txt").innerHTML = h + ":" + m + " " + ampm;
+        var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        } // add zero in front of numbers < 10
+        return i;
+    }
+
+</script>
+
+
+<style>
+    .mega-inline .mega-title-badge {
+        display: table;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+
+
+</style>
+<svg id="SvgjsSvg1001" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1002"></defs><polyline id="SvgjsPolyline1003" points="0,0"></polyline><path id="SvgjsPath1004" d="M0 0 "></path></svg><iframe id="itemscout-extension-gtag" src="https://pixel.itemscout.io" scrolling="no" style="
+      width: 1px;
+      height: 1px;
+      border: none;
+      margin: 0;
+      position: absolute;
+      top:0;
+      left:0;
+    "></iframe><div id="its-image-search-container"></div><div id="its-image-crop-container"></div></body></html>
