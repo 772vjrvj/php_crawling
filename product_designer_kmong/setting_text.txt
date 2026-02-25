@@ -405,3 +405,6 @@ bash
 php artisan make:middleware LogMiddleware
 결과:
 app/Http/Middleware/LogMiddleware.php 파일이 생성됩니다.
+
+
+php main.php
