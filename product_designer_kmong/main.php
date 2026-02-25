@@ -1,201 +1,164 @@
 <?php
 /**
- * ihappynanum - login -> JSESSIONID -> mem0302List API call
- * - 쿠키 파일 저장 없음 (메모리로만 Cookie 헤더 사용)
- * - 응답 JSON 그대로 출력
+ * ihappynanum 로그인 -> mem0302List 호출
+ * - 전역에 8개 변수
+ * - main()은 8개 파라미터 받음
+ * - main()은 JSON 반환
+ * - 실행부에서 echo
  */
 
-// === 신규 === 전역 계정 (테스트용)
-const USER_ID = "kdjnp5660";
-const USER_PW = "rlaeownd5660!";
-
-// === 신규 === 공통 UA
-const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36";
-
-function curl_request(string $method, string $url, array $headers, ?string $body = null): array
+// =========================
+// 공통 CURL
+// =========================
+function http_request($method, $url, $headers, $body = null)
 {
     $ch = curl_init($url);
 
-    $opts = [
-        CURLOPT_CUSTOMREQUEST => $method,
+    curl_setopt_array($ch, [
+        CURLOPT_CUSTOMREQUEST  => $method,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HEADER => true,
-        CURLOPT_HTTPHEADER => array_values(array_filter($headers, fn($h) => is_string($h) && trim($h) !== "")),
-        CURLOPT_ENCODING => "",
-
-        // POSTFIELDS는 GET에도 넣을 필요 없음
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HEADER         => true,
+        CURLOPT_HTTPHEADER     => $headers,
+        CURLOPT_ENCODING       => "",
+        CURLOPT_TIMEOUT        => 30,
         CURLOPT_FOLLOWLOCATION => false,
 
-        // === 테스트용(원복 권장): SSL CA 문제 회피 ===
+        // ⚠ SSL 검증 OFF
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
-    ];
+    ]);
 
     if ($body !== null) {
-        $opts[CURLOPT_POSTFIELDS] = $body;
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
     }
 
-    curl_setopt_array($ch, $opts);
-
     $resp = curl_exec($ch);
+
     if ($resp === false) {
         $err = curl_error($ch);
         curl_close($ch);
-        return ["ok" => false, "error" => $err];
+        throw new RuntimeException($err);
     }
 
     $info = curl_getinfo($ch);
-    $hs = $info["header_size"] ?? 0;
+    $hs   = $info['header_size'];
 
-    $respHeader = substr($resp, 0, $hs);
-    $respBody = substr($resp, $hs);
+    $header = substr($resp, 0, $hs);
+    $body   = substr($resp, $hs);
 
     curl_close($ch);
 
-    return [
-        "ok" => true,
-        "status" => (int)($info["http_code"] ?? 0),
-        "resp_header" => $respHeader,
-        "body" => $respBody,
-        "body_len" => strlen($respBody),
-    ];
+    return [$header, $body];
 }
 
-function extract_cookie_pairs(string $respHeader): array
+// =========================
+// JSESSIONID 추출
+// =========================
+function extract_jsessionid($header)
 {
-    // Set-Cookie: KEY=VALUE; ... => ["KEY" => "VALUE"]
-    $cookies = [];
-    if (preg_match_all('/^Set-Cookie:\s*([^;=\s]+)=([^;]*)/mi', $respHeader, $m)) {
-        for ($i = 0; $i < count($m[1]); $i++) {
-            $k = trim($m[1][$i]);
-            $v = trim($m[2][$i]);
-            if ($k !== "") $cookies[$k] = $v;
-        }
-    }
-    return $cookies;
-}
-
-function cookie_header_from_pairs(array $pairs): string
-{
-    $items = [];
-    foreach ($pairs as $k => $v) {
-        $items[] = $k . "=" . $v;
-    }
-    return implode("; ", $items);
-}
-
-function find_location(string $respHeader): string
-{
-    if (preg_match('/^Location:\s*(.+)\s*$/mi', $respHeader, $m)) {
+    if (preg_match('/Set-Cookie:\s*JSESSIONID=([^;]+)/i', $header, $m)) {
         return trim($m[1]);
     }
     return "";
 }
 
-function login_get_jsessionid(): string
-{
+// =========================
+// main (8개 파라미터)
+// =========================
+function main(
+    $userId,
+    $userPw,
+    $startDate,
+    $searchCond,
+    $sTxt,
+    $sTxt2,
+    $numberOfRows,
+    $currentPage
+) {
+
+    // 1️⃣ 로그인
     $loginUrl = "https://www.ihappynanum.com/Nanum/nanum/user/j_spring_security_check";
 
-    $postBody = http_build_query([
-        "j_username" => USER_ID,
-        "j_password" => USER_PW,
-    ], "", "&", PHP_QUERY_RFC3986);
+    $loginPayload = http_build_query([
+        "j_username" => $userId,
+        "j_password" => $userPw
+    ]);
 
-    $headers = [
-        "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-        "Cache-Control: no-cache",
-        "Pragma: no-cache",
-        "Content-Type: application/x-www-form-urlencoded",
-        "Origin: https://www.ihappynanum.com",
-        "Referer: https://www.ihappynanum.com/",
-        "User-Agent: " . UA,
-    ];
+    list($loginHeader,) = http_request(
+        "POST",
+        $loginUrl,
+        [
+            "Content-Type: application/x-www-form-urlencoded",
+            "User-Agent: Mozilla/5.0",
+            "Origin: https://www.ihappynanum.com",
+            "Referer: https://www.ihappynanum.com/"
+        ],
+        $loginPayload
+    );
 
-    $r = curl_request("POST", $loginUrl, $headers, $postBody);
-    if (!$r["ok"]) {
-        throw new RuntimeException("login curl error: " . $r["error"]);
+    $jsession = extract_jsessionid($loginHeader);
+
+    if ($jsession === "") {
+        throw new RuntimeException("로그인 실패 (JSESSIONID 없음)");
     }
 
-    // 보통 302 + Set-Cookie(JSESSIONID)
-    $cookies = extract_cookie_pairs($r["resp_header"]);
-    $jsid = $cookies["JSESSIONID"] ?? "";
+    // 2️⃣ API 호출
+    $apiUrl = "https://www.ihappynanum.com/Nanum/nanum/user/mem/mem0302List";
 
-    // 디버그 출력
-    echo "LOGIN status=" . $r["status"] . PHP_EOL;
-    echo "LOGIN location=" . (find_location($r["resp_header"]) ?: "(none)") . PHP_EOL;
-    echo "LOGIN JSESSIONID=" . ($jsid !== "" ? $jsid : "(none)") . PHP_EOL;
-    echo PHP_EOL;
+    $apiPayload = http_build_query([
+        "startDate"    => $startDate,
+        "searchCond"   => $searchCond,
+        "sTxt"         => $sTxt,
+        "sTxt2"        => $sTxt2,
+        "numberOfRows" => $numberOfRows,
+        "currentPage"  => $currentPage
+    ]);
 
-    return $jsid;
+    list(, $apiBody) = http_request(
+        "POST",
+        $apiUrl,
+        [
+            "Content-Type: application/x-www-form-urlencoded",
+            "User-Agent: Mozilla/5.0",
+            "X-Requested-With: XMLHttpRequest",
+            "Cookie: JSESSIONID=" . $jsession
+        ],
+        $apiPayload
+    );
+
+    return $apiBody; // JSON 반환
 }
 
-function call_mem0302List(string $jsessionid): string
-{
-    $url = "https://www.ihappynanum.com/Nanum/nanum/user/mem/mem0302List";
 
-    $payload = http_build_query([
-        "startDate" => "2021",
-        "searchCond" => "all",
-        "sTxt" => "",
-        "sTxt2" => "",
-        "numberOfRows" => "50",
-        "currentPage" => "1",
-    ], "", "&", PHP_QUERY_RFC3986);
 
-    // 너가 준 헤더 기반 (AJAX)
-    $headers = [
-        "Accept: application/json, text/javascript, */*; q=0.01",
-        "Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-        "Cache-Control: no-cache",
-        "Pragma: no-cache",
-        "Content-Type: application/x-www-form-urlencoded",
-        "Origin: https://www.ihappynanum.com",
-        "Referer: https://www.ihappynanum.com/Nanum/nanum/user/mem/Mem0302.nanum",
-        "User-Agent: " . UA,
-        "X-Requested-With: XMLHttpRequest",
-        // sec-ch-ua 류는 필수는 아니지만 원하면 추가 가능
-        "Cookie: JSESSIONID=" . $jsessionid,
-    ];
+// =========================
+// 파라미터 (8개)
+// =========================
+$USER_ID        = "kdjnp5660";
+$USER_PW        = "rlaeownd5660!";
 
-    $r = curl_request("POST", $url, $headers, $payload);
-    if (!$r["ok"]) {
-        throw new RuntimeException("mem0302List curl error: " . $r["error"]);
-    }
+$START_DATE     = "2021";           // 기간
+$S_TXT2         = "";               // 결제이력이있는회원만조회
 
-    echo "API status=" . $r["status"] . PHP_EOL;
-    echo "API body_len=" . $r["body_len"] . PHP_EOL;
+$SEARCH_COND    = "all";            // 상세조회 select box 값 all : 전체, memName : 회원명
+$S_TXT          = "";               // 상세조회 input 값
 
-    // 응답 원문(JSON 문자열) 그대로 반환
-    return $r["body"];
-}
+$NUMBER_OF_ROWS = "50";             // 페이지 당 갯수 50개씩
+$CURRENT_PAGE   = "1";              // 현제 페이지 1
 
-function main(): void
-{
-    try {
-        $jsid = login_get_jsessionid();
-        if ($jsid === "") {
-            echo "❌ JSESSIONID를 못 받았습니다. (로그인 실패 또는 정책 차단 가능)" . PHP_EOL;
-            return;
-        }
+// =========================
+// 실행부
+// =========================
+$json = main(
+    $USER_ID,
+    $USER_PW,
+    $START_DATE,
+    $SEARCH_COND,
+    $S_TXT,
+    $S_TXT2,
+    $NUMBER_OF_ROWS,
+    $CURRENT_PAGE
+);
 
-        $json = call_mem0302List($jsid);
+echo $json;
 
-        echo PHP_EOL . "===== RESPONSE JSON =====" . PHP_EOL;
-        echo $json . PHP_EOL;
-
-        // JSON 파싱해서 transactionStatus만 찍고 싶으면:
-        $obj = json_decode($json, true);
-        if (is_array($obj)) {
-            echo PHP_EOL . "transactionStatus=" . (isset($obj["transactionStatus"]) ? var_export($obj["transactionStatus"], true) : "null") . PHP_EOL;
-            echo "errorMsg=" . (isset($obj["errorMsg"]) ? var_export($obj["errorMsg"], true) : "null") . PHP_EOL;
-        } else {
-            echo PHP_EOL . "⚠ json_decode 실패" . PHP_EOL;
-        }
-    } catch (Exception $e) {
-        echo "ERROR: " . $e->getMessage() . PHP_EOL;
-    }
-}
-
-main();
